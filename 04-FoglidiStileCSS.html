@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fogli di stile CSS — Unità B2.3</title>
+  <meta name="description"
+    content="Percorso interattivo sui CSS: modalità di inclusione, selettori, div e span, box model, cascata">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --paper: #F6F3EC;
+      --paper-2: #EFEBE0;
+      --ink: #201E1B;
+      --ink-soft: #4B463F;
+      --line: #D8D1C2;
+      --tag: #0B6E4F;
+      --tag-soft: #E4F0EA;
+      --amber: #E2A400;
+      --amber-soft: #FBF0CE;
+      --brick: #B7402F;
+      --brick-soft: #F7E4DF;
+      --blue: #2451A3;
+      --blue-soft: #E4EAF6;
+      --radius: 10px;
+      --serif: "Source Serif 4", Georgia, serif;
+      --sans: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+      --mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 76px
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto
+      }
+
+      * {
+        animation-duration: .001ms !important;
+        transition-duration: .001ms !important
+      }
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background: var(--amber-soft);
+      color: var(--ink)
+    }
+
+    a {
+      color: var(--tag)
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    .sans {
+      font-family: var(--sans)
+    }
+
+    code,
+    .mono {
+      font-family: var(--mono)
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--tag);
+      outline-offset: 2px
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 0;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 10px 16px;
+      z-index: 200
+    }
+
+    .skip-link:focus {
+      left: 8px;
+      top: 8px
+    }
+
+    /* ---------- TOPBAR ---------- */
+    header.top {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(246, 243, 236, .92);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .top-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 18px
+    }
+
+    .brand {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 17px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .brand .brk {
+      color: var(--tag);
+      font-family: var(--mono)
+    }
+
+    nav.pillnav {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+      flex: 1
+    }
+
+    nav.pillnav::-webkit-scrollbar {
+      display: none
+    }
+
+    nav.pillnav a {
+      font-family: var(--sans);
+      font-size: 13.5px;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--ink-soft);
+      padding: 7px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+      border: 1px solid transparent;
+      transition: background .15s, color .15s;
+    }
+
+    nav.pillnav a:hover {
+      background: var(--paper-2)
+    }
+
+    nav.pillnav a.active {
+      background: var(--ink);
+      color: var(--paper)
+    }
+
+    a.home {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      text-decoration: none;
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+      white-space: nowrap;
+      background: #fff;
+    }
+
+    a.home:hover {
+      border-color: var(--tag);
+      color: var(--tag)
+    }
+
+    /* ---------- LAYOUT ---------- */
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 20px
+    }
+
+    section {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--line)
+    }
+
+    section:last-of-type {
+      border-bottom: none
+    }
+
+    .section-head {
+      max-width: 700px;
+      margin-bottom: 34px
+    }
+
+    .kicker {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--tag);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px
+    }
+
+    .kicker::before {
+      content: "<";
+      color: var(--ink-soft)
+    }
+
+    .kicker::after {
+      content: ">";
+      color: var(--ink-soft)
+    }
+
+    h2 {
+      font-size: clamp(28px, 4vw, 38px);
+      margin: 0 0 12px;
+      line-height: 1.15;
+      font-weight: 600
+    }
+
+    .lead {
+      font-size: 17px;
+      color: var(--ink-soft);
+      margin: 0
+    }
+
+    .lead strong {
+      color: var(--ink)
+    }
+
+    .lab {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start
+    }
+
+    .lab>* {
+      min-width: 0
+    }
+
+    @media (max-width:860px) {
+      .lab {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      padding: 74px 0 60px
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 44px;
+      align-items: center
+    }
+
+    @media (max-width:860px) {
+      .hero-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 5.4vw, 54px);
+      line-height: 1.06;
+      margin: 0 0 18px;
+      font-weight: 600;
+      letter-spacing: -.01em
+    }
+
+    .hero h1 .accent {
+      color: var(--tag)
+    }
+
+    .hero p.sub {
+      font-size: 18px;
+      color: var(--ink-soft);
+      max-width: 46ch;
+      margin: 0 0 26px
+    }
+
+    .meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--ink-soft)
+    }
+
+    .meta span {
+      border: 1px solid var(--line);
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #fff
+    }
+
+    .tagviz {
+      background: var(--ink);
+      border-radius: 16px;
+      padding: 22px 22px 20px;
+      color: #F4F1EA;
+      font-family: var(--mono);
+      font-size: 14.5px;
+      box-shadow: 0 18px 40px -22px rgba(20, 18, 15, .55);
+    }
+
+    .tagviz .win {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px
+    }
+
+    .tagviz .win i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: block;
+      background: #5b564c
+    }
+
+    .tagviz pre {
+      margin: 0;
+      white-space: pre-wrap;
+      line-height: 1.7
+    }
+
+    .tagviz .t {
+      color: #7FD4A8
+    }
+
+    .tagviz .c {
+      color: #8FAEE0
+    }
+
+    .tagviz .a {
+      color: #E8C46A
+    }
+
+    .tagviz .m {
+      color: #8a8577
+    }
+
+    .rule-row code .t {
+      color: var(--tag)
+    }
+
+    .rule-row code .c {
+      color: var(--blue)
+    }
+
+    .rule-row code .a {
+      color: #8a5a00
+    }
+
+    .rule-row code .m {
+      color: #8a8577
+    }
+
+    .hero-prev {
+      background: #fff;
+      color: #000;
+      border-radius: 8px;
+      margin-top: 16px;
+      padding: 16px 18px;
+      min-height: 70px
+    }
+
+    .fake-h1 {
+      font-family: "Times New Roman", Times, serif;
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 1.2
+    }
+
+    .hero-ctrl {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 14px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #b9b3a4
+    }
+
+    .sw {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #5b564c;
+      cursor: pointer;
+      padding: 0
+    }
+
+    .sw.active {
+      border-color: #F4F1EA;
+      box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px #F4F1EA
+    }
+
+    .mini {
+      font-family: var(--mono);
+      font-size: 12px;
+      border: 1px solid #5b564c;
+      background: transparent;
+      color: #F4F1EA;
+      border-radius: 6px;
+      padding: 3px 9px;
+      cursor: pointer
+    }
+
+    .mini.active {
+      background: #F4F1EA;
+      color: var(--ink)
+    }
+
+    /* ---------- COMPONENTS ---------- */
+    .btn {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+      padding: 9px 16px;
+      border-radius: 8px;
+      transition: transform .12s, background .15s;
+    }
+
+    .btn:hover {
+      background: #3a352d
+    }
+
+    .btn:active {
+      transform: translateY(1px)
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--line)
+    }
+
+    .btn.ghost:hover {
+      border-color: var(--ink)
+    }
+
+    .btn.small {
+      padding: 6px 11px;
+      font-size: 12.5px
+    }
+
+    .btn[disabled] {
+      opacity: .4;
+      cursor: default
+    }
+
+    .pill-toggle {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px;
+      background: #fff;
+      flex-wrap: wrap
+    }
+
+    .pill-toggle button {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 13px;
+      border: none;
+      background: transparent;
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: var(--ink-soft);
+    }
+
+    .pill-toggle button.active {
+      background: var(--ink);
+      color: var(--paper)
+    }
+
+    .note-callout {
+      border-left: 4px solid var(--brick);
+      background: var(--brick-soft);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      font-size: 15px;
+      margin-top: 24px
+    }
+
+    .note-callout strong {
+      color: var(--brick)
+    }
+
+    .note-callout code {
+      background: rgba(255, 255, 255, .6);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .9em
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px
+    }
+
+    .chip-i {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink-soft)
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--paper-2);
+      color: var(--ink-soft)
+    }
+
+    .badge.ok {
+      background: var(--tag-soft);
+      color: var(--tag)
+    }
+
+    .badge.chg {
+      background: var(--amber-soft);
+      color: #7a5a00
+    }
+
+    .status-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap
+    }
+
+    .pv-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin: 0 0 6px
+    }
+
+    .pv {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      display: block
+    }
+
+    /* code blocks */
+    .codeblock {
+      background: var(--ink);
+      color: #F4F1EA;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px -22px rgba(20, 18, 15, .6)
+    }
+
+    .cb-head {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid #3a362f;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #b9b3a4
+    }
+
+    .cb-head i {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #5b564c;
+      display: block
+    }
+
+    .cb-head span {
+      margin-left: 8px
+    }
+
+    .cb-body {
+      margin: 0;
+      padding: 14px 16px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow: auto;
+      white-space: pre;
+      tab-size: 2
+    }
+
+    .cb-body .t {
+      color: #7FD4A8
+    }
+
+    .cb-body .c {
+      color: #8FAEE0
+    }
+
+    .cb-body .a {
+      color: #E8C46A
+    }
+
+    .cb-body .m {
+      color: #8a8577
+    }
+
+    .ln {
+      display: block
+    }
+
+    .ln.new {
+      background: rgba(226, 164, 0, .22);
+      box-shadow: -16px 0 0 rgba(226, 164, 0, .22), 16px 0 0 rgba(226, 164, 0, .22)
+    }
+
+    .ln.mark {
+      background: rgba(124, 212, 168, .18);
+      box-shadow: -16px 0 0 rgba(124, 212, 168, .18), 16px 0 0 rgba(124, 212, 168, .18)
+    }
+
+    .ln.mark::after {
+      content: "  ← collega il foglio di stile";
+      color: #7FD4A8;
+      font-size: 12px
+    }
+
+    /* file tabs */
+    .filetabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap
+    }
+
+    .filetabs button {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 6px 11px;
+      border-radius: 7px;
+      border: 1px solid var(--line);
+      background: #fff;
+      cursor: pointer;
+      color: var(--ink-soft)
+    }
+
+    .filetabs button.active {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink)
+    }
+
+    /* anatomia */
+    #anaCode {
+      cursor: default
+    }
+
+    #anaCode [data-part] {
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background .15s
+    }
+
+    #anaCode [data-part]:hover {
+      background: rgba(255, 255, 255, .12)
+    }
+
+    #anaCode[data-active="sel"] .sel {
+      background: rgba(124, 212, 168, .35)
+    }
+
+    #anaCode[data-active="blk"] .blk {
+      background: rgba(143, 174, 224, .25)
+    }
+
+    #anaCode[data-active="decl"] .decl {
+      background: rgba(226, 164, 0, .30)
+    }
+
+    #anaCode[data-active="prop"] .prop {
+      background: rgba(143, 174, 224, .45)
+    }
+
+    #anaCode[data-active="val"] .val {
+      background: rgba(232, 196, 106, .45)
+    }
+
+    #anaCode[data-active="cmt"] .cmt {
+      background: rgba(255, 255, 255, .2)
+    }
+
+    .part-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px
+    }
+
+    .part-chips button {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 7px 13px;
+      cursor: pointer;
+      color: var(--ink-soft)
+    }
+
+    .part-chips button.active {
+      background: var(--tag);
+      border-color: var(--tag);
+      color: #fff
+    }
+
+    .explain {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 18px 20px;
+      margin-top: 16px;
+      min-height: 110px
+    }
+
+    .explain h4 {
+      margin: 0 0 6px;
+      font-size: 17px
+    }
+
+    .explain p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--ink-soft)
+    }
+
+    .explain code {
+      background: var(--tag-soft);
+      color: var(--tag);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .88em
+    }
+
+    /* selettori */
+    .rule-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 28px
+    }
+
+    @media (max-width:860px) {
+      .rule-cards {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .rule-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 18px 20px
+    }
+
+    .rule-card h4 {
+      margin: 0 0 4px;
+      font-size: 16px
+    }
+
+    .rule-card .sym {
+      font-family: var(--mono);
+      color: var(--tag);
+      font-size: 20px;
+      font-weight: 700
+    }
+
+    .rule-card p {
+      margin: 6px 0 10px;
+      font-size: 14px;
+      color: var(--ink-soft)
+    }
+
+    .rule-card code {
+      display: block;
+      font-size: 12.5px;
+      background: var(--paper);
+      padding: 6px 9px;
+      border-radius: 6px;
+      border: 1px solid var(--line)
+    }
+
+    .sel-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px
+    }
+
+    .sel-btn {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      color: var(--ink)
+    }
+
+    .sel-btn:hover {
+      border-color: var(--ink)
+    }
+
+    .sel-btn.active {
+      background: var(--tag);
+      border-color: var(--tag);
+      color: #fff
+    }
+
+    .sel-free {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap
+    }
+
+    .sel-free input {
+      font-family: var(--mono);
+      font-size: 14px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-width: 220px;
+      background: #fff
+    }
+
+    .sel-result {
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--ink-soft);
+      margin-bottom: 14px;
+      min-height: 22px
+    }
+
+    .sel-result b {
+      color: var(--tag)
+    }
+
+    .mock {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px
+    }
+
+    .mock-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      transition: background .15s, border-color .15s
+    }
+
+    .mock-row.hit {
+      border-color: var(--tag);
+      background: var(--tag-soft)
+    }
+
+    .mock-row code {
+      font-size: 12px;
+      color: var(--ink-soft);
+      white-space: nowrap
+    }
+
+    .mock-row h1 {
+      font-size: 20px;
+      margin: 0;
+      font-weight: 700
+    }
+
+    .mock-row h2 {
+      font-size: 17px;
+      margin: 0;
+      font-weight: 700
+    }
+
+    .mock-row p {
+      margin: 0;
+      font-size: 15px
+    }
+
+    .mock-row button {
+      font-family: var(--sans);
+      font-size: 14px;
+      padding: 6px 14px
+    }
+
+    /* playground */
+    .pg-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin: 12px 0 5px;
+      display: flex;
+      justify-content: space-between
+    }
+
+    .pg-label:first-child {
+      margin-top: 0
+    }
+
+    .pg-ta {
+      width: 100%;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.6;
+      background: #141311;
+      color: #EDEAE1;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 14px;
+      resize: vertical;
+      outline: none;
+      display: block
+    }
+
+    .pg-ta:focus {
+      box-shadow: 0 0 0 3px rgba(11, 110, 79, .4)
+    }
+
+    .challenge {
+      margin-top: 12px;
+      font-size: 14.5px;
+      background: var(--amber-soft);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: var(--sans)
+    }
+
+    .challenge b {
+      color: #7a5a00
+    }
+
+    /* div/span demo */
+    .ctrl-row {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      align-items: center
+    }
+
+    .ctrl-row label.chk {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      cursor: pointer
+    }
+
+    .ds-stage {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 18px
+    }
+
+    .ds-wrap {
+      display: block
+    }
+
+    .ds-stage.flex .ds-wrap {
+      display: flex;
+      gap: 10px
+    }
+
+    .ds-stage.flex .ds-wrap .ds-box {
+      flex: 1
+    }
+
+    .ds-box {
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin: 0 0 6px
+    }
+
+    .ds-stage.flex .ds-box {
+      margin: 0
+    }
+
+    .ds-stage.show .ds-box {
+      outline: 2px solid var(--blue);
+      background: var(--blue-soft)
+    }
+
+    .ds-chip {
+      padding: 0 2px
+    }
+
+    .ds-stage.show .ds-chip {
+      outline: 2px solid var(--amber);
+      background: var(--amber-soft)
+    }
+
+    .ds-stage.span-block .ds-chip {
+      display: block;
+      margin: 4px 0
+    }
+
+    .ds-p {
+      margin: 14px 0 0
+    }
+
+    /* box model */
+    .bm-stage {
+      display: flex;
+      justify-content: center;
+      padding: 26px 10px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: auto
+    }
+
+    .bm-margin {
+      background: var(--amber-soft);
+      border: 1px dashed #cfa43a;
+      display: inline-block;
+      transition: padding .12s
+    }
+
+    .bm-box {
+      background: var(--blue-soft);
+      border-style: solid;
+      border-color: var(--ink);
+      transition: border-width .12s, padding .12s
+    }
+
+    .bm-content {
+      background: var(--tag-soft);
+      padding: 14px 22px;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--tag);
+      text-align: center;
+      min-width: 120px
+    }
+
+    .sliders {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 18px
+    }
+
+    .slider {
+      display: grid;
+      grid-template-columns: 90px 1fr 54px;
+      gap: 12px;
+      align-items: center;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600
+    }
+
+    .slider input[type=range] {
+      width: 100%;
+      accent-color: var(--tag)
+    }
+
+    .slider output {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--ink-soft)
+    }
+
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      font-family: var(--sans);
+      font-size: 12.5px;
+      color: var(--ink-soft)
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      margin-right: 6px;
+      vertical-align: -1px
+    }
+
+    /* cascata */
+    .rule-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      cursor: pointer
+    }
+
+    .rule-row.off {
+      opacity: .45
+    }
+
+    .rule-row input {
+      margin-top: 5px;
+      accent-color: var(--tag);
+      width: 16px;
+      height: 16px
+    }
+
+    .rule-row .rc {
+      flex: 1
+    }
+
+    .rule-row code {
+      font-size: 13px;
+      display: block
+    }
+
+    .rule-row small {
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--ink-soft)
+    }
+
+    .rule-row .pw {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--paper-2);
+      color: var(--ink-soft);
+      white-space: nowrap
+    }
+
+    .rule-row.win {
+      border-color: var(--tag);
+      box-shadow: 0 0 0 2px var(--tag-soft)
+    }
+
+    .cas-stage {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 14px
+    }
+
+    .cas-msg {
+      font-family: var(--sans);
+      font-size: 14.5px;
+      margin: 12px 0
+    }
+
+    .cas-msg b {
+      color: var(--tag)
+    }
+
+
+    .scale {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      margin-bottom: 16px;
+      color: var(--ink-soft);
+      flex-wrap: wrap
+    }
+
+    .scale span.s {
+      padding: 4px 9px;
+      border-radius: 6px;
+      background: #fff;
+      border: 1px solid var(--line)
+    }
+
+    /* stepper */
+    .stepper-ctrl {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin: 14px 0;
+      flex-wrap: wrap
+    }
+
+    .dots {
+      display: flex;
+      gap: 6px;
+      margin-left: 6px
+    }
+
+    .dots i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--line);
+      display: block;
+      cursor: pointer
+    }
+
+    .dots i.on {
+      background: var(--tag)
+    }
+
+    .dots i.cur {
+      box-shadow: 0 0 0 3px var(--tag-soft);
+      background: var(--tag)
+    }
+
+    .step-text {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-top: 14px;
+      font-size: 15px;
+      min-height: 92px
+    }
+
+    .step-text h4 {
+      margin: 0 0 4px;
+      font-size: 16px
+    }
+
+    .step-text p {
+      margin: 0;
+      color: var(--ink-soft)
+    }
+
+    .step-text code {
+      background: var(--tag-soft);
+      color: var(--tag);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .88em
+    }
+
+
+    .links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 34px
+    }
+
+    @media (max-width:860px) {
+      .links {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .linkcard {
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 16px 18px;
+      text-decoration: none;
+      color: var(--ink);
+      transition: border-color .15s, transform .15s
+    }
+
+    .linkcard:hover {
+      border-color: var(--tag);
+      transform: translateY(-2px)
+    }
+
+    .linkcard b {
+      font-family: var(--sans);
+      font-size: 15px;
+      display: block
+    }
+
+    .linkcard span {
+      font-size: 13px;
+      color: var(--ink-soft)
+    }
+
+
+    footer {
+      padding: 40px 20px 60px;
+      text-align: center;
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--ink-soft)
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main" class="skip-link">Vai al contenuto</a>
+
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="#top"><span class="brk">B2.3 </span> · CSS</a>
+      <nav class="pillnav" id="pillnav" aria-label="Sezioni">
+        <a href="#perche">Perché CSS</a>
+        <a href="#modi">Tre modi</a>
+        <a href="#anatomia">Anatomia</a>
+        <a href="#selettori">Selettori</a>
+        <a href="#prova">Prova</a>
+        <a href="#divspan">div e span</a>
+        <a href="#box">Box model</a>
+        <a href="#cascata">Cascata</a>
+        <a href="#esempio">Esempio</a>
+        <a href="#link">Link</a>
+      </nav>
+      <a class="home" href="index.html">← Indice</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-grid">
+        <div>
+          <h1>Dai uno <span class="accent">stile</span> al Web.</h1>
+          <p class="sub">L'HTML costruisce la pagina, i CSS la vestono: colori, spazi, bordi, layout. </p>
+          <div class="meta">
+            <span>Unità B2 · Linguaggio CSS</span>
+            <span>libro pp. 177–182</span>
+          </div>
+        </div>
+        <div class="tagviz">
+          <div class="win"><i></i><i></i><i></i></div>
+          <pre id="heroCode"></pre>
+          <div class="hero-prev">
+            <div class="fake-h1" id="heroH1">Titolo del sito</div>
+          </div>
+          <div class="hero-ctrl">
+            <span>color</span>
+            <button class="sw active" data-c="blue" style="background:blue" aria-label="blue"></button>
+            <button class="sw" data-c="red" style="background:red" aria-label="red"></button>
+            <button class="sw" data-c="green" style="background:green" aria-label="green"></button>
+            <span style="margin-left:10px">text-align</span>
+            <button class="mini" data-a="left">left</button>
+            <button class="mini" data-a="center">center</button>
+            <button class="mini active" data-a="right">right</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. PERCHE -->
+    <section id="perche">
+      <div class="section-head">
+        <div class="kicker">01 · a cosa servono</div>
+        <h2>HTML dice cosa, CSS dice come</h2>
+        <p class="lead">I <strong>CSS</strong> (<em>Cascading Style Sheets</em>, fogli di stile) definiscono l'aspetto
+          delle pagine web. Stesso HTML, tre stili diversi.</p>
+      </div>
+      <div class="lab">
+        <div>
+          <div class="pill-toggle" id="themeToggle">
+            <button class="active" data-theme="none">Nessun CSS</button>
+            <button data-theme="a">Stile A</button>
+            <button data-theme="b">Stile B</button>
+          </div>
+          <div class="pg-label" style="margin-top:16px"><span>index.html</span></div>
+          <div id="perHtml"></div>
+          <div class="pg-label" style="margin-top:14px"><span>CSS</span></div>
+          <div id="perCss"></div>
+        </div>
+        <div>
+          <div class="pv-label">anteprima nel browser</div>
+          <iframe class="pv" id="perFrame" sandbox="" title="Anteprima" style="height:360px"></iframe>
+          <div class="status-row"><span class="badge ok">HTML invariato</span><span class="badge chg" id="perBadge">CSS:
+              nessuno</span></div>
+        </div>
+      </div>
+      <div class="note-callout">Abbiamo già citato (unità B1) è la <em>separation of concerns</em>: contenuto e
+        struttura da una parte (HTML), presentazione dall'altra (CSS). Cambi un modulo senza toccare l'altro.</div>
+    </section>
+
+    <!-- 2. TRE MODI -->
+    <section id="modi">
+      <div class="section-head">
+        <div class="kicker">02 · tre modi</div>
+        <h2>Dove si scrive il CSS?</h2>
+        <p class="lead">Ci sono tre modalità: <strong>inline</strong>, <strong>interno</strong> (embedded) ed
+          <strong>esterno</strong>.
+        </p>
+      </div>
+      <div class="pill-toggle" id="modeToggle">
+        <button class="active" data-mode="inline">Inline</button>
+        <button data-mode="emb">Interno (embedded)</button>
+        <button data-mode="ext">Esterno (file .css)</button>
+      </div>
+      <div class="lab" style="margin-top:20px">
+        <div>
+          <div class="filetabs" id="fileTabs"></div>
+          <div id="modeCode"></div>
+        </div>
+        <div id="modePrev"></div>
+      </div>
+      <div class="chips" id="modeChips"></div>
+      <div class="note-callout" id="modeNote"></div>
+    </section>
+
+    <!-- 3. ANATOMIA -->
+    <section id="anatomia">
+      <div class="section-head">
+        <div class="kicker">03 · sintassi</div>
+        <h2>Anatomia di una regola CSS</h2>
+        <p class="lead">Ogni regola ha sempre la stessa forma e contiene i seguenti elementi:</p>
+      </div>
+      <div class="lab">
+        <div>
+          <div class="part-chips" id="partChips">
+            <button data-p="sel" class="active">Selettore</button>
+            <button data-p="blk">Blocco di dichiarazioni</button>
+            <button data-p="decl">Dichiarazione</button>
+            <button data-p="prop">Proprietà</button>
+            <button data-p="val">Valore</button>
+            <button data-p="cmt">Commento</button>
+          </div>
+          <div class="codeblock">
+            <div class="cb-head"><i></i><i></i><i></i><span>style.css</span></div>
+            <pre class="cb-body" id="anaCode" data-active="sel"><span class="sel t" data-part="sel">h1</span> <span class="blk" data-part="blk">{
+  <span class="decl" data-part="decl"><span class="prop c" data-part="prop">color</span>: <span class="val a" data-part="val">blue</span>;</span> <span class="cmt m" data-part="cmt">/* Colore del testo blu */</span>
+  <span class="decl" data-part="decl"><span class="prop c" data-part="prop">text-align</span>: <span class="val a" data-part="val">right</span>;</span> <span class="cmt m" data-part="cmt">/* Testo allineato a destra */</span>
+}</span></pre>
+          </div>
+        </div>
+        <div>
+          <div class="explain" id="anaExplain" aria-live="polite"></div>
+          <div class="note-callout"><strong>Ricorda →</strong> proprietà e valore sono separati da <code>:</code>; ogni
+            dichiarazione finisce con <code>;</code>; il blocco sta tra <code>{ }</code>. Dimenticare un <code>;</code>
+            è l'errore più frequente.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SELETTORI -->
+    <section id="selettori">
+      <div class="section-head">
+        <div class="kicker">04 · selettori</div>
+        <h2>A chi si applica lo stile?</h2>
+        <p class="lead">Il <strong>selettore</strong> sceglie gli elementi a cui applicare lo stile.</p>
+      </div>
+      <div class="rule-cards">
+        <div class="rule-card">
+          <div class="sym">h1</div>
+          <h4>Tipo (tag)</h4>
+          <p>Colpisce <b>tutti</b> gli elementi di quel tipo.</p>
+          <code>h1 { color: blue; }</code>
+        </div>
+        <div class="rule-card">
+          <div class="sym">.</div>
+          <h4>Classe</h4>
+          <p>Colpisce <b>più elementi</b>, anche di tipo diverso. Nell'HTML: <code
+              style="display:inline;padding:0 4px">class="..."</code></p>
+          <code>.evidenziato { ... }</code>
+        </div>
+        <div class="rule-card">
+          <div class="sym">#</div>
+          <h4>Id</h4>
+          <p>Colpisce <b>un solo elemento</b>: l'id è unico nella pagina (serve anche per i link interni).</p>
+          <code>#bottone-invio { ... }</code>
+        </div>
+      </div>
+
+      <div class="lab">
+        <div>
+          <div class="pv-label">scegli un selettore</div>
+          <div class="sel-bar" id="selBar"></div>
+          <div class="sel-free">
+            <input id="selInput" type="text" placeholder="oppure scrivine uno: es. h2.evidenziato" spellcheck="false"
+              autocomplete="off">
+            <button class="btn small" id="selGo">Prova</button>
+          </div>
+          <div class="sel-result" id="selResult" aria-live="polite">Clicca un selettore per vedere quali elementi
+            colpisce.</div>
+        </div>
+        <div class="mock" id="selMock"></div>
+      </div>
+    </section>
+
+    <!-- 5. PROVA -->
+    <section id="prova">
+      <div class="section-head">
+        <div class="kicker">05 · laboratorio</div>
+        <h2>Prova Tu!</h2>
+        <p class="lead">Scegli un esempio e cambia colori, valori, selettori: l'anteprima si aggiorna mentre scrivi.</p>
+      </div>
+      <div class="pill-toggle" id="pgToggle" style="margin-bottom:18px">
+        <button class="active" data-pg="tipo">Selettore di tipo</button>
+        <button data-pg="classe">Selettore di classe</button>
+        <button data-pg="id">Selettore id</button>
+        <button data-pg="pagina">Pagina intera</button>
+      </div>
+      <div class="lab">
+        <div>
+          <div class="pg-label"><span>HTML</span><span style="opacity:.6">modificabile</span></div>
+          <textarea class="pg-ta" id="pgHtml" rows="7" spellcheck="false"></textarea>
+          <div class="pg-label"><span>CSS</span><span style="opacity:.6">modificabile</span></div>
+          <textarea class="pg-ta" id="pgCss" rows="9" spellcheck="false"></textarea>
+          <div class="challenge" id="pgChallenge"></div>
+        </div>
+        <div>
+          <div class="pv-label">anteprima</div>
+          <iframe class="pv" id="pgFrame" sandbox="" title="Anteprima laboratorio" style="height:380px"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. DIV E SPAN -->
+    <section id="divspan">
+      <div class="section-head">
+        <div class="kicker">06 · div e span</div>
+        <h2>Integrazione HTML : i tag div e span</h2>
+        <p class="lead"><code>&lt;div&gt;</code> è un elemento <strong>di blocco</strong>: occupa tutta la larghezza e
+          va a capo. <br><code>&lt;span&gt;</code> è <strong>in linea</strong>: resta dentro il testo.
+          <br>Da soli non fanno nulla: servono per applicare stili.
+        </p>
+      </div>
+      <div class="ctrl-row">
+        <label class="chk"><input type="checkbox" id="dsShow" checked> Mostra i riquadri</label>
+        <div>
+          <span class="pv-label" style="margin-right:6px">contenitore</span>
+          <span class="pill-toggle" id="dsFlex"><button class="active" data-v="block">display: block</button><button
+              data-v="flex">display: flex</button></span>
+        </div>
+        <div>
+          <span class="pv-label" style="margin-right:6px">gli span</span>
+          <span class="pill-toggle" id="dsSpan"><button class="active" data-v="inline">inline</button><button
+              data-v="block">block</button></span>
+        </div>
+      </div>
+      <div class="lab">
+        <div class="ds-stage show" id="dsStage">
+          <div class="ds-wrap">
+            <div class="ds-box">Menu</div>
+            <div class="ds-box">Contenuto principale</div>
+            <div class="ds-box">Info</div>
+          </div>
+          <p class="ds-p">Questo testo contiene <span class="ds-chip">uno span</span> e <span class="ds-chip">un altro
+              span</span>: restano nella stessa riga del paragrafo.</p>
+        </div>
+        <div>
+          <div class="codeblock">
+            <div class="cb-head"><i></i><i></i><i></i><span>CSS applicato</span></div>
+            <pre class="cb-body" id="dsCode"></pre>
+          </div>
+          <div class="note-callout" style="margin-top:16px"><strong>Layout moderno →</strong> i <code>div</code> si
+            usano al posto delle tabelle per disporre la pagina: con <code>display: flex</code> (o <code>grid</code>) le
+            colonne si adattano alla larghezza. Le tabelle restano per i <em>dati tabellari</em>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. BOX MODEL -->
+    <section id="box">
+      <div class="section-head">
+        <div class="kicker">07 · box model</div>
+        <h2>Ogni elemento è una scatola</h2>
+        <p class="lead">Nel CSS ogni elemento è un rettangolo fatto di quattro strati: <strong>contenuto</strong>,
+          <strong>padding</strong> (dentro), <strong>border</strong> (bordo), <strong>margin</strong> (fuori). Muovi i
+          cursori.
+        </p>
+      </div>
+      <div class="lab">
+        <div>
+          <div class="sliders">
+            <div class="slider"><label for="bmM">margin</label><input type="range" id="bmM" min="0" max="50"
+                value="20"><output id="bmMo">20px</output></div>
+            <div class="slider"><label for="bmB">border</label><input type="range" id="bmB" min="0" max="24"
+                value="6"><output id="bmBo">6px</output></div>
+            <div class="slider"><label for="bmP">padding</label><input type="range" id="bmP" min="0" max="50"
+                value="18"><output id="bmPo">18px</output></div>
+          </div>
+          <div class="codeblock">
+            <div class="cb-head"><i></i><i></i><i></i><span>style.css</span></div>
+            <pre class="cb-body" id="bmCode"></pre>
+          </div>
+        </div>
+        <div>
+          <div class="bm-stage">
+            <div class="bm-margin" id="bmMargin">
+              <div class="bm-box" id="bmBox">
+                <div class="bm-content">contenuto</div>
+              </div>
+            </div>
+          </div>
+          <div class="legend">
+            <span><i style="background:var(--amber-soft);border:1px dashed #cfa43a"></i>margin</span>
+            <span><i style="background:var(--ink)"></i>border</span>
+            <span><i style="background:var(--blue-soft)"></i>padding</span>
+            <span><i style="background:var(--tag-soft)"></i>contenuto</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. CASCATA -->
+    <section id="cascata">
+      <div class="section-head">
+        <div class="kicker">08 · cascading</div>
+        <h2>Il concetto di cascata</h2>
+        <p class="lead">Più regole possono influenzare lo stesso elemento. Prevale la più <strong>specifica</strong> e,
+          a
+          parità, quella scritta <strong>per ultima</strong>. </p>
+      </div>
+      <div class="scale"><span class="s">tipo</span> &lt; <span class="s">classe</span> &lt; <span class="s">id</span>
+        &lt; <span class="s">inline</span> <span style="margin-left:8px">(semplificando)</span></div>
+      <div class="lab">
+        <div id="ruleList"></div>
+        <div>
+          <div class="cas-stage" id="casStage">Che colore ho?</div>
+          <div class="codeblock">
+            <div class="cb-head"><i></i><i></i><i></i><span>index.html</span></div>
+            <pre class="cb-body" id="casCode"></pre>
+          </div>
+          <div class="cas-msg" id="casMsg" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="note-callout"><strong>Nota →</strong> esiste anche <code>!important</code>, che forza una regola a
+        vincere: meglio usarlo il meno possibile, perché rende il CSS difficile da correggere.</div>
+    </section>
+
+    <!-- 9. ESEMPIO -->
+    <section id="esempio">
+      <div class="section-head">
+        <div class="kicker">09 · esempio guidato</div>
+        <h2>Costruiamo la pagina degli aforismi</h2>
+        <p class="lead">Esempio del libro (p. 180): un <code>div</code>, uno <code>span</code>, una classe, un id.
+          Avanza una regola alla volta e guarda cosa cambia.</p>
+      </div>
+      <div class="stepper-ctrl">
+        <button class="btn ghost small" id="stPrev">← Indietro</button>
+        <button class="btn small" id="stNext">Avanti →</button>
+        <div class="dots" id="stDots"></div>
+        <span class="badge" id="stCount"></span>
+      </div>
+      <div class="lab">
+        <div>
+          <div class="pg-label"><span>HTML (non cambia)</span></div>
+          <div id="stHtml"></div>
+          <div class="pg-label" style="margin-top:14px"><span>CSS (le righe nuove sono evidenziate)</span></div>
+          <div id="stCss"></div>
+        </div>
+        <div>
+          <div class="pv-label">anteprima</div>
+          <iframe class="pv" id="stFrame" sandbox="" title="Anteprima aforismi" style="height:400px"></iframe>
+          <div class="step-text" id="stText" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. LINK UTILI -->
+    <section id="link">
+      <div class="section-head">
+        <div class="kicker">10 · link utili</div>
+        <h2>Per approfondire</h2>
+      </div>
+      <div class="links">
+        <a class="linkcard" href="https://developer.mozilla.org/it/docs/Web/CSS/Reference" target="_blank"
+          rel="noopener"><b>Elenco delle proprietà CSS</b><span>MDN · riferimento completo</span></a>
+        <a class="linkcard" href="https://developer.mozilla.org/it/docs/Learn_web_development/Core/Styling_basics"
+          target="_blank" rel="noopener"><b>Tutorial base su CSS</b><span>MDN · le basi dello stile</span></a>
+        <a class="linkcard" href="https://www.w3schools.com/css/" target="_blank" rel="noopener"><b>Tutorial completo su
+            CSS</b><span>W3Schools · con esempi da provare</span></a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    Materiale didattico basato su "Hashtag 2", Modulo B, Linguaggi per il web · Realizzato con l'assistenza di Claude
+    (Anthropic)
+  </footer>
+
+  <script>
+    /* ============ HELPERS ============ */
+    function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    function hlCSSLine(line) {
+      var re = /(\/\*[\s\S]*?\*\/)|([^{}\/]+)\{|([a-zA-Z-]+)(\s*:\s*)([^;{}]*)(;?)|([{}])/g;
+      var out = '', last = 0, m;
+      while ((m = re.exec(line))) {
+        out += esc(line.slice(last, m.index));
+        if (m[1]) out += '<span class="m">' + esc(m[1]) + '</span>';
+        else if (m[2] !== undefined) out += '<span class="t">' + esc(m[2]) + '</span>{';
+        else if (m[3]) out += '<span class="c">' + esc(m[3]) + '</span>' + esc(m[4]) + '<span class="a">' + esc(m[5]) + '</span>' + esc(m[6]);
+        else out += esc(m[7]);
+        last = re.lastIndex;
+      }
+      return out + esc(line.slice(last));
+    }
+    function hlCSS(src) { return src.split('\n').map(hlCSSLine).join('\n'); }
+
+    function hlTags(s) {
+      var re = /<!DOCTYPE[^>]*>|<\/?[a-zA-Z][^>]*>/g;
+      var out = '', last = 0, m;
+      while ((m = re.exec(s))) {
+        out += esc(s.slice(last, m.index));
+        var tag = m[0];
+        if (tag.charAt(1) === '!') { out += '<span class="m">' + esc(tag) + '</span>'; }
+        else {
+          var p = /^(<\/?)([a-zA-Z0-9]+)([\s\S]*?)(\/?>)$/.exec(tag);
+          var attrs = esc(p[3]).replace(/([\w-]+)(=)("[^"]*")/g, '<span class="c">$1</span>$2<span class="a">$3</span>');
+          out += esc(p[1]) + '<span class="t">' + p[2] + '</span>' + attrs + esc(p[4]);
+        }
+        last = re.lastIndex;
+      }
+      return out + esc(s.slice(last));
+    }
+    function hlHTML(src) {
+      var parts = src.split(/(<style[^>]*>[\s\S]*?<\/style>)/);
+      return parts.map(function (part, i) {
+        if (i % 2 === 1) {
+          var m = /^(<style[^>]*>)([\s\S]*?)(<\/style>)$/.exec(part);
+          return hlTags(m[1]) + hlCSS(m[2]) + hlTags(m[3]);
+        }
+        return hlTags(part);
+      }).join('');
+    }
+    function codeBlock(title, bodyHtml) {
+      return '<div class="codeblock"><div class="cb-head"><i></i><i></i><i></i><span>' + title + '</span></div><pre class="cb-body">' + bodyHtml + '</pre></div>';
+    }
+    /* righe separate: markFn(rigaGrezza, indice) restituisce classe extra oppure '' */
+    function linesBlock(title, src, lang, markFn) {
+      var hl = (lang === 'css') ? hlCSS(src) : hlHTML(src);
+      var raw = src.split('\n'), parts = hl.split('\n');
+      var body = parts.map(function (p, i) {
+        var cls = markFn ? markFn(raw[i], i) : '';
+        return '<span class="ln' + (cls ? ' ' + cls : '') + '">' + (p === '' ? ' ' : p) + '</span>';
+      }).join('');
+      return codeBlock(title, body);
+    }
+    function pageDoc(css, html) {
+      return '<!DOCTYPE html><html><head><meta charset="utf-8"><style>' + css + '</style></head><body>' + html + '</body></html>';
+    }
+
+    /* ============ NAV ACTIVE STATE ============ */
+    (function () {
+      var links = document.querySelectorAll('#pillnav a');
+      var sections = [].map.call(links, function (l) { return document.querySelector(l.getAttribute('href')); });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var id = '#' + e.target.id;
+            links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === id); });
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      sections.forEach(function (s) { if (s) io.observe(s); });
+    })();
+
+    /* ============ HERO ============ */
+    (function () {
+      var st = { c: 'blue', a: 'right' };
+      var pre = document.getElementById('heroCode'), h = document.getElementById('heroH1');
+      function render() {
+        pre.innerHTML = hlCSS('h1 {\n  color: ' + st.c + ';\n  text-align: ' + st.a + ';\n}');
+        h.style.color = st.c; h.style.textAlign = st.a;
+      }
+      document.querySelectorAll('.sw').forEach(function (b) {
+        b.addEventListener('click', function () {
+          st.c = b.dataset.c;
+          document.querySelectorAll('.sw').forEach(function (x) { x.classList.toggle('active', x === b); });
+          render();
+        });
+      });
+      document.querySelectorAll('.mini').forEach(function (b) {
+        b.addEventListener('click', function () {
+          st.a = b.dataset.a;
+          document.querySelectorAll('.mini').forEach(function (x) { x.classList.toggle('active', x === b); });
+          render();
+        });
+      });
+      render();
+    })();
+
+    /* ============ 1. PERCHE ============ */
+    (function () {
+      var html = '<h1>Gita al lago</h1>\n<p>Sabato 12 aprile, ritrovo alle 9:00.</p>\n<ul>\n  <li>Zaino</li>\n  <li>Acqua</li>\n  <li>Panino</li>\n</ul>';
+      var themes = {
+        none: '',
+        a: 'body {\n  font-family: Georgia, serif;\n  background-color: #fbf6e6;\n  color: #3a2f1c;\n}\nh1 {\n  color: #0b6e4f;\n  border-bottom: 3px solid #0b6e4f;\n}\nli {\n  margin-bottom: 4px;\n}',
+        b: 'body {\n  font-family: Arial, sans-serif;\n  background-color: #14213d;\n  color: #f1f1f1;\n}\nh1 {\n  color: #ffc845;\n  text-align: center;\n  text-transform: uppercase;\n}\nli {\n  list-style: none;\n  background-color: #1f3260;\n  margin: 6px 0;\n  padding: 8px 12px;\n  border-radius: 6px;\n}'
+      };
+      var badges = { none: 'CSS: nessuno', a: 'CSS: Stile A', b: 'CSS: Stile B' };
+      document.getElementById('perHtml').innerHTML = codeBlock('index.html', hlHTML(html));
+      function render(k) {
+        var css = themes[k];
+        document.getElementById('perCss').innerHTML = codeBlock('stile.css', css ? hlCSS(css) : hlCSS('/* nessun foglio di stile: vale lo stile predefinito del browser */'));
+        document.getElementById('perFrame').srcdoc = pageDoc(css, html);
+        document.getElementById('perBadge').textContent = badges[k];
+      }
+      var btns = document.querySelectorAll('#themeToggle button');
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          btns.forEach(function (x) { x.classList.toggle('active', x === b); });
+          render(b.dataset.theme);
+        });
+      });
+      render('none');
+    })();
+
+    /* ============ 2. TRE MODI ============ */
+    (function () {
+      var inlineDoc = '<!DOCTYPE html>\n<html>\n  <head>\n    <title>Esempio CSS inline</title>\n  </head>\n  <body>\n    <h1 style="color: blue;">Titolo blu</h1>\n    <p style="color: red;">Paragrafo rosso</p>\n    <div style="text-align: center;">\n      <p>Questo paragrafo è centrato perché sta in una sezione centrata</p>\n    </div>\n  </body>\n</html>';
+      var embDoc = '<!DOCTYPE html>\n<html>\n  <head>\n    <title>Esempio CSS interno</title>\n    <style>\n      body { background-color: powderblue; }\n      h1   { color: blue; }\n      p    { color: red; }\n    </style>\n  </head>\n  <body>\n    <h1>Titolo blu</h1>\n    <p>Paragrafo rosso</p>\n    <div>\n      <p>Anche questo paragrafo è rosso</p>\n    </div>\n  </body>\n</html>';
+      var link = '<link rel="stylesheet" href="styles.css">';
+      var extIndex = '<!DOCTYPE html>\n<html>\n  <head>\n    <title>Esempio CSS esterno</title>\n    ' + link + '\n  </head>\n  <body>\n    <h1>Titolo</h1>\n    <p>Paragrafo</p>\n  </body>\n</html>';
+      var extContatti = '<!DOCTYPE html>\n<html>\n  <head>\n    <title>Contatti</title>\n    ' + link + '\n  </head>\n  <body>\n    <h1>Contatti</h1>\n    <p>Scrivici quando vuoi.</p>\n  </body>\n</html>';
+      function extCss(color) { return 'body { background-color: powderblue; }\nh1   { color: ' + color + '; }\np    { color: red; }'; }
+
+      var chips = {
+        inline: ['Colpisce un solo elemento', 'Ha la priorità più alta', 'Difficile da mantenere'],
+        emb: ['Vale per una sola pagina', 'Regole per tutti i tag', 'Il CSS resta dentro l\'HTML'],
+        ext: ['Un file per molte pagine', 'Contenuto e forma separati', 'È l\'approccio consigliato']
+      };
+      var notes = {
+        inline: '<strong>Quando conviene →</strong> quasi mai: per un ritocco rapido su un solo elemento. Lo stile resta mescolato al contenuto e va ripetuto ovunque.',
+        emb: '<strong>Quando conviene →</strong> per una pagina singola o un prototipo. Se hai più pagine, devi copiare lo stesso <code>&lt;style&gt;</code> in ognuna.',
+        ext: '<strong>È preferibile →</strong> perché separa il <em>contenuto</em> (HTML) dalla <em>formattazione</em> (CSS): cambi un file e si aggiornano tutte le pagine. Il collegamento va nell\'<code>&lt;head&gt;</code>. Se due regole si scontrano, l\'inline vince; poi conta la specificità, e a parità l\'ultima scritta.'
+      };
+      var state = { mode: 'inline', file: 'index.html', color: 'blue' };
+      var tabs = document.getElementById('fileTabs'), code = document.getElementById('modeCode'), prev = document.getElementById('modePrev');
+
+      function frameHtml(label, id, h) {
+        return '<div class="pv-label">' + label + '</div><iframe class="pv" id="' + id + '" sandbox="" title="' + label + '" style="height:' + h + 'px;margin-bottom:12px"></iframe>';
+      }
+      function withCss(doc, css) { return doc.replace(link, '<style>' + css + '</style>'); }
+
+      function render() {
+        var m = state.mode;
+        if (m === 'ext') {
+          var files = ['index.html', 'styles.css', 'contatti.html'];
+          tabs.innerHTML = files.map(function (f) { return '<button data-f="' + f + '" class="' + (state.file === f ? 'active' : '') + '">' + f + '</button>'; }).join('');
+          if (state.file === 'index.html') code.innerHTML = linesBlock('index.html', extIndex, 'html', function (r) { return /rel="stylesheet"/.test(r) ? 'mark' : ''; });
+          else if (state.file === 'contatti.html') code.innerHTML = linesBlock('contatti.html', extContatti, 'html', function (r) { return /rel="stylesheet"/.test(r) ? 'mark' : ''; });
+          else code.innerHTML = linesBlock('styles.css', extCss(state.color), 'css');
+          prev.innerHTML = frameHtml('index.html', 'f1', 130) + frameHtml('contatti.html', 'f2', 130) +
+            '<button class="btn small" id="extBtn">Cambia h1 in ' + (state.color === 'blue' ? 'verde' : 'blu') + ' (solo styles.css)</button>';
+          document.getElementById('f1').srcdoc = withCss(extIndex, extCss(state.color));
+          document.getElementById('f2').srcdoc = withCss(extContatti, extCss(state.color));
+          document.getElementById('extBtn').addEventListener('click', function () {
+            state.color = state.color === 'blue' ? 'green' : 'blue'; state.file = 'styles.css'; render();
+          });
+        } else {
+          tabs.innerHTML = '';
+          var doc = (m === 'inline') ? inlineDoc : embDoc;
+          code.innerHTML = linesBlock(m === 'inline' ? 'inline.html' : 'interno.html', doc, 'html');
+          prev.innerHTML = frameHtml('anteprima nel browser', 'f1', 260);
+          document.getElementById('f1').srcdoc = doc;
+        }
+        document.getElementById('modeChips').innerHTML = chips[m].map(function (c) { return '<span class="chip-i">' + c + '</span>'; }).join('');
+        document.getElementById('modeNote').innerHTML = notes[m];
+      }
+      tabs.addEventListener('click', function (e) {
+        var b = e.target.closest('button'); if (!b) return;
+        state.file = b.dataset.f; render();
+      });
+      var btns = document.querySelectorAll('#modeToggle button');
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          btns.forEach(function (x) { x.classList.toggle('active', x === b); });
+          state.mode = b.dataset.mode; state.file = 'index.html'; render();
+        });
+      });
+      render();
+    })();
+
+    /* ============ 3. ANATOMIA ============ */
+    (function () {
+      var info = {
+        sel: { t: 'Selettore', d: 'Indica <b>a quali elementi</b> della pagina si applica la regola. Qui: tutti i tag <code>&lt;h1&gt;</code>.' },
+        blk: { t: 'Blocco di dichiarazioni', d: 'Tutto ciò che sta tra <code>{</code> e <code>}</code>. Può contenere quante dichiarazioni vuoi, una dopo l\'altra.' },
+        decl: { t: 'Dichiarazione', d: 'Una coppia <code>proprietà: valore;</code> che descrive <b>un solo aspetto</b> dello stile. Termina sempre con il punto e virgola.' },
+        prop: { t: 'Proprietà', d: '<b>Cosa</b> vuoi cambiare: il colore del testo (<code>color</code>), l\'allineamento (<code>text-align</code>), lo sfondo (<code>background-color</code>)…' },
+        val: { t: 'Valore', d: '<b>Come</b> lo vuoi cambiare. Ogni proprietà accetta valori di un certo tipo: nomi di colore, misure (<code>10px</code>, <code>1.5em</code>), parole chiave (<code>right</code>).' },
+        cmt: { t: 'Commento', d: 'Testo scritto tra <code>/*</code> e <code>*/</code> che il browser <b>ignora</b>: serve a spiegare il codice a chi lo legge.' }
+      };
+      var code = document.getElementById('anaCode'), box = document.getElementById('anaExplain');
+      var chips = document.querySelectorAll('#partChips button');
+      function show(p) {
+        code.setAttribute('data-active', p);
+        chips.forEach(function (c) { c.classList.toggle('active', c.dataset.p === p); });
+        box.innerHTML = '<h4>' + info[p].t + '</h4><p>' + info[p].d + '</p>';
+      }
+      code.addEventListener('click', function (e) {
+        var el = e.target.closest('[data-part]'); if (el) show(el.dataset.part);
+      });
+      chips.forEach(function (c) { c.addEventListener('click', function () { show(c.dataset.p); }); });
+      show('sel');
+    })();
+
+    /* ============ 4. SELETTORI ============ */
+    (function () {
+      var items = [
+        { tag: 'h1', text: 'Primo titolo' },
+        { tag: 'h1', text: 'Secondo titolo' },
+        { tag: 'h2', cls: 'evidenziato', text: 'Titolo importante' },
+        { tag: 'p', cls: 'evidenziato', text: 'Paragrafo con informazioni chiave.' },
+        { tag: 'p', text: 'Questo è un paragrafo normale.' },
+        { tag: 'button', id: 'bottone-invio', text: 'Invia Modulo' },
+        { tag: 'button', text: 'Annulla' }
+      ];
+      var mock = document.getElementById('selMock');
+      var rows = [];
+      items.forEach(function (it) {
+        var row = document.createElement('div'); row.className = 'mock-row';
+        var el = document.createElement(it.tag);
+        if (it.cls) el.className = it.cls;
+        if (it.id) el.id = it.id;
+        el.textContent = it.text;
+        var lab = document.createElement('code');
+        lab.textContent = '<' + it.tag + (it.cls ? ' class="' + it.cls + '"' : '') + (it.id ? ' id="' + it.id + '"' : '') + '>';
+        row.appendChild(el); row.appendChild(lab); mock.appendChild(row);
+        rows.push({ row: row, el: el });
+      });
+      var list = ['h1', 'p', 'button', '.evidenziato', '#bottone-invio', 'p.evidenziato'];
+      var bar = document.getElementById('selBar'), res = document.getElementById('selResult'), input = document.getElementById('selInput');
+      list.forEach(function (s) {
+        var b = document.createElement('button'); b.className = 'sel-btn'; b.textContent = s;
+        b.addEventListener('click', function () { apply(s, b); });
+        bar.appendChild(b);
+      });
+      function kind(s) {
+        if (/^#[\w-]+$/.test(s)) return 'selettore di <b>id</b>';
+        if (/^\.[\w-]+$/.test(s)) return 'selettore di <b>classe</b>';
+        if (/^[a-z][a-z0-9]*$/i.test(s)) return 'selettore di <b>tipo</b>';
+        return 'selettore <b>combinato</b>';
+      }
+      function apply(s, btn) {
+        s = s.trim();
+        document.querySelectorAll('.sel-btn').forEach(function (x) { x.classList.toggle('active', x === btn); });
+        if (!s) { return; }
+        var n = 0;
+        try {
+          rows.forEach(function (r) { var hit = r.el.matches(s); r.row.classList.toggle('hit', hit); if (hit) n++; });
+        } catch (err) {
+          rows.forEach(function (r) { r.row.classList.remove('hit'); });
+          res.innerHTML = 'Selettore non valido: <b>' + esc(s) + '</b>';
+          return;
+        }
+        res.innerHTML = '<code>' + esc(s) + '</code> · ' + kind(s) + ' → colpisce <b>' + n + '</b> element' + (n === 1 ? 'o' : 'i') + ' su ' + rows.length;
+      }
+      document.getElementById('selGo').addEventListener('click', function () { apply(input.value, null); });
+      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') apply(input.value, null); });
+    })();
+
+    /* ============ 5. LABORATORIO ============ */
+    (function () {
+      var presets = {
+        tipo: {
+          html: '<h1>Primo titolo</h1>\n<h1>Secondo titolo</h1>',
+          css: 'h1 {\n  color: rgb(255, 0, 200);\n  text-align: center;\n  text-transform: uppercase;\n}',
+          ch: '<b>Sfida:</b> fai in modo che i titoli siano allineati a destra e di colore verde.'
+        },
+        classe: {
+          html: '<h2 class="evidenziato">Titolo importante</h2>\n<p class="evidenziato">Paragrafo con informazioni chiave.</p>\n<p>Questo è un paragrafo normale e non verrà modificato.</p>',
+          css: '.evidenziato {\n  background-color: yellow;\n  padding: 10px;\n  border-left: 5px solid orange;\n}',
+          ch: '<b>Sfida:</b> aggiungi <code>class="evidenziato"</code> anche al terzo paragrafo e guarda cosa succede.'
+        },
+        id: {
+          html: '<button id="bottone-invio">Invia Modulo</button>\n<button>Annulla</button>',
+          css: '#bottone-invio {\n  background-color: green;\n  color: white;\n  border-radius: 20px;\n  cursor: pointer;\n}',
+          ch: '<b>Sfida:</b> dai al bottone "Annulla" un suo id e uno colore di testo rosso. Perché non puoi riusare <code>#bottone-invio</code>?'
+        },
+        pagina: {
+          html: '<h1>Titolo blu</h1>\n<p>Paragrafo rosso</p>\n<div>\n  <p>Anche questo è un paragrafo</p>\n</div>',
+          css: 'body {\n  background-color: powderblue;\n}\nh1 {\n  color: blue;\n}\np {\n  color: red;\n}',
+          ch: '<b>Sfida:</b> cambia il colore di sfondo della pagina e rendi i paragrafi centrati.'
+        }
+      };
+      var h = document.getElementById('pgHtml'), c = document.getElementById('pgCss'), f = document.getElementById('pgFrame'), ch = document.getElementById('pgChallenge');
+      var timer;
+      function update() { f.srcdoc = pageDoc(c.value, h.value); }
+      function later() { clearTimeout(timer); timer = setTimeout(update, 150); }
+      h.addEventListener('input', later); c.addEventListener('input', later);
+      var btns = document.querySelectorAll('#pgToggle button');
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          btns.forEach(function (x) { x.classList.toggle('active', x === b); });
+          var p = presets[b.dataset.pg];
+          h.value = p.html; c.value = p.css; ch.innerHTML = p.ch; update();
+        });
+      });
+      var p0 = presets.tipo; h.value = p0.html; c.value = p0.css; ch.innerHTML = p0.ch; update();
+    })();
+
+    /* ============ 6. DIV E SPAN ============ */
+    (function () {
+      var stage = document.getElementById('dsStage'), code = document.getElementById('dsCode');
+      var st = { show: true, flex: 'block', span: 'inline' };
+      function render() {
+        stage.classList.toggle('show', st.show);
+        stage.classList.toggle('flex', st.flex === 'flex');
+        stage.classList.toggle('span-block', st.span === 'block');
+        var css = '.contenitore {\n  display: ' + st.flex + ';' + (st.flex === 'flex' ? '\n  gap: 10px;' : '') + '\n}\n.pezzo {\n  display: ' + st.span + ';\n}';
+        if (st.show) css += '\n/* riquadri attivi solo per mostrarteli */';
+        code.innerHTML = hlCSS(css);
+      }
+      document.getElementById('dsShow').addEventListener('change', function (e) { st.show = e.target.checked; render(); });
+      [['dsFlex', 'flex'], ['dsSpan', 'span']].forEach(function (g) {
+        var btns = document.querySelectorAll('#' + g[0] + ' button');
+        btns.forEach(function (b) {
+          b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.classList.toggle('active', x === b); });
+            st[g[1]] = b.dataset.v; render();
+          });
+        });
+      });
+      render();
+    })();
+
+    /* ============ 7. BOX MODEL ============ */
+    (function () {
+      var m = document.getElementById('bmM'), b = document.getElementById('bmB'), p = document.getElementById('bmP');
+      var margin = document.getElementById('bmMargin'), box = document.getElementById('bmBox'), code = document.getElementById('bmCode');
+      function render() {
+        margin.style.padding = m.value + 'px';
+        box.style.borderWidth = b.value + 'px';
+        box.style.padding = p.value + 'px';
+        document.getElementById('bmMo').textContent = m.value + 'px';
+        document.getElementById('bmBo').textContent = b.value + 'px';
+        document.getElementById('bmPo').textContent = p.value + 'px';
+        code.innerHTML = hlCSS('.scatola {\n  margin: ' + m.value + 'px;\n  border: ' + b.value + 'px solid black;\n  padding: ' + p.value + 'px;\n}');
+      }
+      [m, b, p].forEach(function (s) { s.addEventListener('input', render); });
+      render();
+    })();
+
+    /* ============ 8. CASCATA ============ */
+    (function () {
+      var rules = [
+        { id: 'tipo', code: 'p { color: red; }', color: 'red', w: 1, label: 'tipo', note: 'selettore di tipo' },
+        { id: 'classe', code: '.nota { color: blue; }', color: 'blue', w: 10, label: 'classe', note: 'selettore di classe' },
+        { id: 'id', code: '#intro { color: green; }', color: 'green', w: 100, label: 'id', note: 'selettore id' },
+        { id: 'inline', code: 'style="color: purple;"', color: 'purple', w: 1000, label: 'inline', note: 'attributo style nel tag' },
+        { id: 'classe2', code: '.nota { color: orange; }', color: 'orange', w: 10, label: 'classe', note: 'stessa classe, scritta dopo la precedente' }
+      ];
+      var on = { tipo: true, classe: true, id: true, inline: true, classe2: false };
+      var list = document.getElementById('ruleList'), stage = document.getElementById('casStage'), codeEl = document.getElementById('casCode'), msg = document.getElementById('casMsg');
+      rules.forEach(function (r) {
+        var row = document.createElement('label'); row.className = 'rule-row'; row.dataset.id = r.id;
+        row.innerHTML = '<input type="checkbox"><div class="rc"><code></code><small>' + r.note + '</small></div><span class="pw">peso ' + r.w + '</span>';
+        row.querySelector('code').innerHTML = r.id === 'inline'
+          ? '<span class="c">style</span>=<span class="a">"color: purple;"</span>'
+          : hlCSS(r.code);
+        var cb = row.querySelector('input'); cb.checked = on[r.id];
+        cb.addEventListener('change', function () { on[r.id] = cb.checked; render(); });
+        list.appendChild(row);
+      });
+      function winner() {
+        var best = null;
+        rules.forEach(function (r, i) {
+          if (!on[r.id]) return;
+          var score = r.w * 100 + i;
+          if (!best || score > best.score) best = { r: r, score: score };
+        });
+        return best ? best.r : null;
+      }
+      function render() {
+        var w = winner();
+        stage.style.color = w ? w.color : '#000';
+        document.querySelectorAll('.rule-row').forEach(function (row) {
+          var r = rules.filter(function (x) { return x.id === row.dataset.id; })[0];
+          row.classList.toggle('off', !on[r.id]);
+          row.classList.toggle('win', !!w && w.id === r.id);
+        });
+        var tag = '<p id="intro" class="nota"' + (on.inline ? ' style="color: purple;"' : '') + '>Che colore ho?</p>';
+        codeEl.innerHTML = hlHTML(tag);
+        if (w) msg.innerHTML = 'Vince la regola <b>' + esc(w.id === 'inline' ? 'inline' : w.code.split(' ')[0]) + '</b> (' + w.note + ') → <b>' + w.color + '</b>';
+        else msg.innerHTML = 'Nessuna regola attiva: vale il colore predefinito del browser (nero).';
+      }
+      render();
+    })();
+
+    /* ============ 9. ESEMPIO GUIDATO ============ */
+    (function () {
+      var html = '<div id="title" class="important">Aforismi</div>\n<div class="aphorism">\n  <div>\n    Ogni tecnologia sufficientemente avanzata\n    è indistinguibile dalla\n    <span class="important">magia</span>\n  </div>\n  <div class="author important">Arthur C. Clarke</div>\n</div>\n<div class="aphorism">\n  <div>\n    <span class="important">Se</span> fai solo quello che sai fare\n    <span class="important">non sarai</span> mai più di\n    quello che sei ora\n  </div>\n  <div class="author important">Maestro Shifu, Kung Fu Panda 3, 2016</div>\n</div>';
+      var b1 = '#title {\n  font-size: 1.5em;\n}';
+      var b2a = '.aphorism {\n  color: #32516b;\n  background-color: #cce6fa;\n  border: 1px solid #1f6eb3;\n  border-left: 20px solid #1f6eb3;\n}';
+      var b2b = '.aphorism {\n  color: #32516b;\n  background-color: #cce6fa;\n  border: 1px solid #1f6eb3;\n  border-left: 20px solid #1f6eb3;\n  margin: 1em;\n  padding: 1em;\n}';
+      var b3 = '.author {\n  font-style: italic;\n  padding-left: 1em;\n  margin-top: 0.5em;\n}';
+      var b4 = '.important {\n  font-weight: bold;\n}';
+      var b5 = 'span.important {\n  background-color: rgb(252, 230, 120);\n  padding: 0 2px 2px 2px;\n  border: 1px dashed rgb(135, 135, 134);\n  border-radius: 3px;\n}';
+      var steps = [
+        { css: '', t: 'Solo HTML', d: 'Senza CSS il browser usa lo stile predefinito: testo nero su bianco, tutto in colonna. La struttura c\'è già, manca la presentazione.' },
+        { css: b1, t: '#title — selettore id', d: 'Un id colpisce <b>un solo elemento</b>: il titolo. <code>font-size: 1.5em</code> lo ingrandisce di una volta e mezza rispetto al testo normale.' },
+        { css: b1 + '\n' + b2a, t: '.aphorism — colori e bordi', d: 'Selettore di classe: colpisce <b>entrambe</b> le card. Attenzione all\'ordine: <code>border-left</code> è scritto <b>dopo</b> <code>border</code>, così ridefinisce solo il lato sinistro.' },
+        { css: b1 + '\n' + b2b, t: '.aphorism — margin e padding', d: '<code>margin</code> è lo spazio <b>fuori</b> dal bordo, <code>padding</code> quello <b>dentro</b>. <code>1em</code> = la dimensione del testo corrente.' },
+        { css: b1 + '\n' + b2b + '\n' + b3, t: '.author — corsivo e rientro', d: 'Colpisce solo gli elementi con <code>class="author"</code>. Nota: nell\'HTML l\'autore ha <code>class="author important"</code>, cioè <b>due classi insieme</b>.' },
+        { css: b1 + '\n' + b2b + '\n' + b3 + '\n' + b4, t: '.important — grassetto', d: 'La classe è usata su <code>div</code> e su <code>span</code> diversi: il grassetto arriva a tutti, titolo e autori compresi. (Il libro usa <code>bolder</code>, qui <code>bold</code>: più chiaro.)' },
+        { css: b1 + '\n' + b2b + '\n' + b3 + '\n' + b4 + '\n' + b5, t: 'span.important — tag + classe', d: 'Selettore <b>combinato</b>: solo gli <code>span</code> con quella classe ricevono l\'evidenziatore giallo. I <code>div</code> con la stessa classe restano senza sfondo.' }
+      ];
+      var idx = 0;
+      document.getElementById('stHtml').innerHTML = codeBlock('index.html', hlHTML(html));
+      var dots = document.getElementById('stDots');
+      steps.forEach(function (s, i) {
+        var d = document.createElement('i'); d.addEventListener('click', function () { idx = i; render(); }); dots.appendChild(d);
+      });
+      function cssLines(css, prev) {
+        var cur = css.split('\n'), pc = {};
+        prev.split('\n').forEach(function (l) { pc[l] = (pc[l] || 0) + 1; });
+        var seen = {};
+        var body = cur.map(function (l) {
+          seen[l] = (seen[l] || 0) + 1;
+          var isNew = seen[l] > (pc[l] || 0);
+          return '<span class="ln' + (isNew ? ' new' : '') + '">' + (l === '' ? ' ' : hlCSSLine(l)) + '</span>';
+        }).join('');
+        return codeBlock('stile.css', body);
+      }
+      function render() {
+        var s = steps[idx], prev = idx > 0 ? steps[idx - 1].css : '';
+        document.getElementById('stCss').innerHTML = s.css ? cssLines(s.css, prev) : codeBlock('stile.css', hlCSS('/* ancora vuoto */'));
+        document.getElementById('stFrame').srcdoc = pageDoc(s.css, html);
+        document.getElementById('stText').innerHTML = '<h4>' + s.t + '</h4><p>' + s.d + '</p>';
+        document.getElementById('stCount').textContent = 'passo ' + (idx + 1) + ' / ' + steps.length;
+        document.getElementById('stPrev').disabled = idx === 0;
+        document.getElementById('stNext').disabled = idx === steps.length - 1;
+        [].forEach.call(dots.children, function (d, i) { d.className = i < idx ? 'on' : (i === idx ? 'cur' : ''); });
+      }
+      document.getElementById('stPrev').addEventListener('click', function () { if (idx > 0) { idx--; render(); } });
+      document.getElementById('stNext').addEventListener('click', function () { if (idx < steps.length - 1) { idx++; render(); } });
+      render();
+    })();
+
+  </script>
+</body>
+
+</html>
