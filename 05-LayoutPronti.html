@@ -1,110 +1,191 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Esempi di layout — Unità B2.4</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<style>
-/* solo ciò che manca in style.css (che va caricato prima) */
-main{padding:44px 20px 70px}
-.top-inner{flex-wrap:wrap}
-a.home{margin-left:auto}
-h1{font-size:clamp(30px,4.6vw,44px);line-height:1.1;margin:8px 0 12px;font-weight:600}
-.lead{max-width:68ch;margin-bottom:28px}
-.lab{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
-.lab>*{min-width:0}
-@media(max-width:860px){.lab{grid-template-columns:1fr}}
-.lbl{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink-soft);margin:14px 0 5px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.lbl:first-child{margin-top:0}
-textarea{width:100%;font-family:var(--mono);font-size:12.5px;line-height:1.55;background:#141311;color:#EDEAE1;border:none;border-radius:10px;padding:12px 14px;resize:vertical;display:block}
-iframe{width:100%;height:480px;border:1px solid var(--line);border-radius:10px;background:#fff;display:block}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Esempi di layout — Unità B2.4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* solo ciò che manca in style.css (che va caricato prima) */
+    main {
+      padding: 44px 20px 70px
+    }
+
+    .top-inner {
+      flex-wrap: wrap
+    }
+
+    a.home {
+      margin-left: auto
+    }
+
+    h1 {
+      font-size: clamp(30px, 4.6vw, 44px);
+      line-height: 1.1;
+      margin: 8px 0 12px;
+      font-weight: 600
+    }
+
+    .lead {
+      max-width: 68ch;
+      margin-bottom: 28px
+    }
+
+    .lab {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start
+    }
+
+    .lab>* {
+      min-width: 0
+    }
+
+    @media(max-width:860px) {
+      .lab {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .lbl {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin: 14px 0 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px
+    }
+
+    .lbl:first-child {
+      margin-top: 0
+    }
+
+    textarea {
+      width: 100%;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.55;
+      background: #141311;
+      color: #EDEAE1;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 14px;
+      resize: vertical;
+      display: block
+    }
+
+    iframe {
+      width: 100%;
+      height: 480px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      display: block
+    }
+  </style>
 </head>
+
 <body>
-<header class="top"><div class="top-inner">
-  <a class="brand" href="#"><span class="brk">B2.4</span> · Esempi di Layout</a>
-  <div class="pill-toggle" id="tabs"></div>
-  <a class="home" href="index.html">← Indice</a>
-</div></header>
-
-<main>
-  <div class="kicker">layout pronti</div>
-  <h1>Tre layout da copiare e personalizzare</h1>
-  <p class="lead">Scegli un layout, cambia colori, spazi e bordi nel CSS e guarda subito il risultato. Quando ti piace, copia il codice o scarica i file e usali nel tuo sito.</p>
-
-  <div class="lab">
-    <div>
-      <div class="lbl"><span>HTML</span><span><button class="btn ghost small" data-copy="html">Copia</button> <button class="btn small" data-dl="html">Scarica index.html</button></span></div>
-      <textarea id="html" rows="13" spellcheck="false"></textarea>
-      <div class="lbl"><span>CSS (modificabile)</span><span><button class="btn ghost small" data-copy="css">Copia</button> <button class="btn small" data-dl="css">Scarica style.css</button></span></div>
-      <textarea id="css" rows="16" spellcheck="false"></textarea>
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="#"><span class="brk">B2.4</span> · Esempi di Layout</a>
+      <div class="pill-toggle" id="tabs"></div>
+      <a class="home" href="index.html">← Indice</a>
     </div>
-    <div>
-      <div class="lbl"><span>anteprima</span><button class="btn ghost small" id="reset">Ripristina il layout originale</button></div>
-      <iframe id="frame" sandbox="" title="Anteprima del layout"></iframe>
+  </header>
+
+  <main>
+    <div class="kicker">layout pronti</div>
+    <h1>Tre layout da copiare e personalizzare</h1>
+    <p class="lead">Scegli un layout, cambia colori, spazi e bordi nel CSS e guarda subito il risultato. Quando ti
+      piace, copia il codice o scarica i file e usali nel tuo sito. Rivedi le principali proprietà
+      CSS nella <a href="04-FogliDiStileCSS.html#proprieta">pagina dedicata →</a></p>
+    </p>
+
+    <div class="lab">
+      <div>
+        <div class="lbl"><span>HTML</span><span><button class="btn ghost small" data-copy="html">Copia</button> <button
+              class="btn small" data-dl="html">Scarica index.html</button></span></div>
+        <textarea id="html" rows="13" spellcheck="false"></textarea>
+        <div class="lbl"><span>CSS (modificabile)</span><span><button class="btn ghost small"
+              data-copy="css">Copia</button> <button class="btn small" data-dl="css">Scarica style.css</button></span>
+        </div>
+        <textarea id="css" rows="16" spellcheck="false"></textarea>
+      </div>
+      <div>
+        <div class="lbl"><span>anteprima</span><button class="btn ghost small" id="reset">Ripristina il layout
+            originale</button></div>
+        <iframe id="frame" sandbox="" title="Anteprima del layout"></iframe>
+      </div>
     </div>
-  </div>
 
-</main>
+  </main>
 
-<script>
-var L = [
-{
- name: 'Pagina a blocchi',
- html: '<div class="intestazione">\n  <h1>Il mio sito</h1>\n  <p>Una frase che descrive il sito</p>\n</div>\n\n<div class="menu">\n  <a class="voce" href="#">Home</a>\n  <a class="voce" href="#">Chi sono</a>\n  <a class="voce" href="#">Contatti</a>\n</div>\n\n<div class="contenuto">\n  <h2>Benvenuti</h2>\n  <p>Qui scrivi il testo della pagina.</p>\n  <p class="evidenziato">Un paragrafo importante.</p>\n</div>\n\n<div class="piede">© Il mio sito</div>',
- css: 'body {\n  margin: 0;\n  color: #201e1b;\n  background-color: #ffffff;\n}\n\n.intestazione {\n  background-color: #0b6e4f;\n  color: #ffffff;\n  text-align: center;\n  padding: 30px;\n}\n\n.menu {\n  background-color: #e4f0ea;\n  text-align: center;\n  padding: 10px;\n}\n\n.voce {\n  display: inline-block;\n  margin: 5px 12px;\n  font-weight: bold;\n}\n\n.contenuto {\n  margin: 20px;\n  padding: 20px;\n}\n\n.evidenziato {\n  background-color: #fbf0ce;\n  border-left: 5px solid #e2a400;\n  padding: 10px;\n}\n\n.piede {\n  background-color: #201e1b;\n  color: #ffffff;\n  text-align: center;\n  font-size: 14px;\n  padding: 15px;\n}'
-},
-{
- name: 'Menu laterale',
- html: '<div class="pagina">\n\n  <div class="laterale">\n    <h3 class="titolo">Menu</h3>\n    <a class="voce" href="#">Home</a>\n    <a class="voce" href="#">Progetti</a>\n    <a class="voce" href="#">Contatti</a>\n  </div>\n\n  <div class="principale">\n    <h2 class="titolo">Titolo della pagina</h2>\n    <p>Qui scrivi il testo della pagina. Il menu resta sempre a sinistra, accanto al contenuto.</p>\n    <p>Puoi aggiungere quanti paragrafi vuoi.</p>\n  </div>\n\n</div>',
- css: 'body {\n  margin: 0;\n  color: #201e1b;\n}\n\n.pagina {\n  display: flex;\n}\n\n.laterale {\n  width: 180px;\n  background-color: #e4eaf6;\n  padding: 20px;\n}\n\n.voce {\n  display: block;\n  margin: 10px 0;\n  font-weight: bold;\n}\n\n.principale {\n  margin: 10px;\n  padding: 20px;\n}\n\n.titolo {\n  color: #2451a3;\n  text-transform: uppercase;\n}'
-},
-{
- name: 'Schede affiancate',
- html: '<h1 class="titolo-pagina">I miei progetti</h1>\n\n<div class="riga">\n\n  <div class="scheda">\n    <div class="scheda-titolo">Progetto 1</div>\n    <p>Breve descrizione del progetto.</p>\n    <span class="etichetta">HTML</span>\n  </div>\n\n  <div class="scheda">\n    <div class="scheda-titolo">Progetto 2</div>\n    <p>Breve descrizione del progetto.</p>\n    <span class="etichetta">CSS</span>\n  </div>\n\n  <div class="scheda">\n    <div class="scheda-titolo">Progetto 3</div>\n    <p>Breve descrizione del progetto.</p>\n    <span class="etichetta">GitHub</span>\n  </div>\n\n</div>',
- css: 'body {\n  margin: 0;\n  padding: 20px;\n  color: #201e1b;\n  background-color: #f6f3ec;\n}\n\n.titolo-pagina {\n  color: #0b6e4f;\n  text-align: center;\n}\n\n.riga {\n  display: flex;\n}\n\n.scheda {\n  width: 30%;\n  margin: 10px;\n  padding: 15px;\n  background-color: #ffffff;\n  border: 1px solid #d8d1c2;\n  border-radius: 10px;\n}\n\n.scheda-titolo {\n  color: #b7402f;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n\n.etichetta {\n  background-color: #0b6e4f;\n  color: #ffffff;\n  font-size: 12px;\n  padding: 2px 8px;\n  border-radius: 10px;\n}'
-}];
+  <script>
+    var L = [
+      {
+        name: 'Pagina a blocchi',
+        html: '<div class="intestazione">\n  <h1>Il mio sito</h1>\n  <p>Una frase che descrive il sito</p>\n</div>\n\n<div class="menu">\n  <a class="voce" href="#">Home</a>\n  <a class="voce" href="#">Chi sono</a>\n  <a class="voce" href="#">Contatti</a>\n</div>\n\n<div class="contenuto">\n  <h2>Benvenuti</h2>\n  <p>Qui scrivi il testo della pagina.</p>\n  <p class="evidenziato">Un paragrafo importante.</p>\n</div>\n\n<div class="piede">© Il mio sito</div>',
+        css: 'body {\n  margin: 0;\n  color: #201e1b;\n  background-color: #ffffff;\n}\n\n.intestazione {\n  background-color: #0b6e4f;\n  color: #ffffff;\n  text-align: center;\n  padding: 30px;\n}\n\n.menu {\n  background-color: #e4f0ea;\n  text-align: center;\n  padding: 10px;\n}\n\n.voce {\n  display: inline-block;\n  margin: 5px 12px;\n  font-weight: bold;\n}\n\n.contenuto {\n  margin: 20px;\n  padding: 20px;\n}\n\n.evidenziato {\n  background-color: #fbf0ce;\n  border-left: 5px solid #e2a400;\n  padding: 10px;\n}\n\n.piede {\n  background-color: #201e1b;\n  color: #ffffff;\n  text-align: center;\n  font-size: 14px;\n  padding: 15px;\n}'
+      },
+      {
+        name: 'Menu laterale',
+        html: '<div class="pagina">\n\n  <div class="laterale">\n    <h3 class="titolo">Menu</h3>\n    <a class="voce" href="#">Home</a>\n    <a class="voce" href="#">Progetti</a>\n    <a class="voce" href="#">Contatti</a>\n  </div>\n\n  <div class="principale">\n    <h2 class="titolo">Titolo della pagina</h2>\n    <p>Qui scrivi il testo della pagina. Il menu resta sempre a sinistra, accanto al contenuto.</p>\n    <p>Puoi aggiungere quanti paragrafi vuoi.</p>\n  </div>\n\n</div>',
+        css: 'body {\n  margin: 0;\n  color: #201e1b;\n}\n\n.pagina {\n  display: flex;\n}\n\n.laterale {\n  width: 180px;\n  background-color: #e4eaf6;\n  padding: 20px;\n}\n\n.voce {\n  display: block;\n  margin: 10px 0;\n  font-weight: bold;\n}\n\n.principale {\n  margin: 10px;\n  padding: 20px;\n}\n\n.titolo {\n  color: #2451a3;\n  text-transform: uppercase;\n}'
+      },
+      {
+        name: 'Schede affiancate',
+        html: '<h1 class="titolo-pagina">I miei progetti</h1>\n\n<div class="riga">\n\n  <div class="scheda">\n    <div class="scheda-titolo">Progetto 1</div>\n    <p>Breve descrizione del progetto.</p>\n    <span class="etichetta">HTML</span>\n  </div>\n\n  <div class="scheda">\n    <div class="scheda-titolo">Progetto 2</div>\n    <p>Breve descrizione del progetto.</p>\n    <span class="etichetta">CSS</span>\n  </div>\n\n  <div class="scheda">\n    <div class="scheda-titolo">Progetto 3</div>\n    <p>Breve descrizione del progetto.</p>\n    <span class="etichetta">GitHub</span>\n  </div>\n\n</div>',
+        css: 'body {\n  margin: 0;\n  padding: 20px;\n  color: #201e1b;\n  background-color: #f6f3ec;\n}\n\n.titolo-pagina {\n  color: #0b6e4f;\n  text-align: center;\n}\n\n.riga {\n  display: flex;\n}\n\n.scheda {\n  width: 30%;\n  margin: 10px;\n  padding: 15px;\n  background-color: #ffffff;\n  border: 1px solid #d8d1c2;\n  border-radius: 10px;\n}\n\n.scheda-titolo {\n  color: #b7402f;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n\n.etichetta {\n  background-color: #0b6e4f;\n  color: #ffffff;\n  font-size: 12px;\n  padding: 2px 8px;\n  border-radius: 10px;\n}'
+      }];
 
-var cur = 0, h = document.getElementById('html'), c = document.getElementById('css'), f = document.getElementById('frame'), t;
-function update(){ f.srcdoc = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>' + c.value + '</style></head><body>' + h.value + '</body></html>'; }
-function later(){ clearTimeout(t); t = setTimeout(update, 150); }
-function load(i){
-  cur = i;
-  h.value = L[i].html; c.value = L[i].css;
-  [].forEach.call(document.querySelectorAll('#tabs button'), function(b, k){ b.classList.toggle('active', k === i); });
-  update();
-}
-L.forEach(function(l, i){
-  var b = document.createElement('button'); b.textContent = (i + 1) + '. ' + l.name;
-  b.addEventListener('click', function(){ load(i); });
-  document.getElementById('tabs').appendChild(b);
-});
-h.addEventListener('input', later); c.addEventListener('input', later);
-document.getElementById('reset').addEventListener('click', function(){ load(cur); });
+    var cur = 0, h = document.getElementById('html'), c = document.getElementById('css'), f = document.getElementById('frame'), t;
+    function update() { f.srcdoc = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>' + c.value + '</style></head><body>' + h.value + '</body></html>'; }
+    function later() { clearTimeout(t); t = setTimeout(update, 150); }
+    function load(i) {
+      cur = i;
+      h.value = L[i].html; c.value = L[i].css;
+      [].forEach.call(document.querySelectorAll('#tabs button'), function (b, k) { b.classList.toggle('active', k === i); });
+      update();
+    }
+    L.forEach(function (l, i) {
+      var b = document.createElement('button'); b.textContent = (i + 1) + '. ' + l.name;
+      b.addEventListener('click', function () { load(i); });
+      document.getElementById('tabs').appendChild(b);
+    });
+    h.addEventListener('input', later); c.addEventListener('input', later);
+    document.getElementById('reset').addEventListener('click', function () { load(cur); });
 
-function page(){
-  return '<!DOCTYPE html>\n<html lang="it">\n<head>\n  <meta charset="utf-8">\n  <title>Il mio sito</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n' + h.value + '\n</body>\n</html>\n';
-}
-function save(name, text){
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([text], {type: 'text/plain;charset=utf-8'}));
-  a.download = name; document.body.appendChild(a); a.click(); a.remove();
-}
-[].forEach.call(document.querySelectorAll('[data-dl]'), function(b){
-  b.addEventListener('click', function(){ b.dataset.dl === 'html' ? save('index.html', page()) : save('style.css', c.value); });
-});
-[].forEach.call(document.querySelectorAll('[data-copy]'), function(b){
-  b.addEventListener('click', function(){
-    var txt = b.dataset.copy === 'html' ? h.value : c.value, old = b.textContent;
-    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function(){ b.textContent = 'Copiato ✓'; }, function(){ b.textContent = 'Non riuscito'; });
-    setTimeout(function(){ b.textContent = old; }, 1500);
-  });
-});
-load(0);
-</script>
+    function page() {
+      return '<!DOCTYPE html>\n<html lang="it">\n<head>\n  <meta charset="utf-8">\n  <title>Il mio sito</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n' + h.value + '\n</body>\n</html>\n';
+    }
+    function save(name, text) {
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
+      a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    }
+    [].forEach.call(document.querySelectorAll('[data-dl]'), function (b) {
+      b.addEventListener('click', function () { b.dataset.dl === 'html' ? save('index.html', page()) : save('style.css', c.value); });
+    });
+    [].forEach.call(document.querySelectorAll('[data-copy]'), function (b) {
+      b.addEventListener('click', function () {
+        var txt = b.dataset.copy === 'html' ? h.value : c.value, old = b.textContent;
+        (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { b.textContent = 'Copiato ✓'; }, function () { b.textContent = 'Non riuscito'; });
+        setTimeout(function () { b.textContent = old; }, 1500);
+      });
+    });
+    load(0);
+  </script>
 </body>
+
 </html>
