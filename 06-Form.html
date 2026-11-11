@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>I Form</title>
+  <meta name="description"
+    content="Percorso interattivo sui form HTML: input, label, controlli, fieldset, validazione e stile con i CSS">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Solo ciò che manca in style.css (che va caricato prima) */
+    nav.pillnav {
+      flex: 1
+    }
+
+    .blocco {
+      margin-top: 20px
+    }
+
+    .sotto {
+      font-size: 20px;
+      margin: 34px 0 8px;
+      font-weight: 600
+    }
+
+    .hint {
+      font-family: var(--sans);
+      font-size: 14.5px;
+      color: var(--ink-soft);
+      margin: 14px 0 0
+    }
+
+    .note-callout {
+      margin-top: 20px
+    }
+
+    .note-callout code {
+      background: rgba(255, 255, 255, .6);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .9em
+    }
+
+    /* riquadri di codice (come nelle altre pagine) */
+    .codeblock {
+      background: var(--ink);
+      color: #F4F1EA;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px -22px rgba(20, 18, 15, .6)
+    }
+
+    .cb-head {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid #3a362f;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #b9b3a4
+    }
+
+    .cb-head i {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #5b564c;
+      display: block
+    }
+
+    .cb-head span {
+      margin-left: 8px
+    }
+
+    .cb-body {
+      margin: 0;
+      padding: 14px 16px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow: auto;
+      white-space: pre;
+      tab-size: 2
+    }
+
+    .cb-body .t {
+      color: #7FD4A8
+    }
+
+    .cb-body .c {
+      color: #8FAEE0
+    }
+
+    .cb-body .a {
+      color: #E8C46A
+    }
+
+    .cb-body .m {
+      color: #8a8577
+    }
+
+    .cb-body [data-part] {
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background .15s
+    }
+
+    .cb-body [data-part]:hover {
+      background: rgba(255, 255, 255, .12)
+    }
+
+    .cb-body [data-part].on {
+      background: rgba(226, 164, 0, .32)
+    }
+
+    .explain {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 16px 20px;
+      margin-top: 14px;
+      min-height: 84px
+    }
+
+    .explain h4 {
+      margin: 0 0 6px;
+      font-size: 17px
+    }
+
+    .explain p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--ink-soft)
+    }
+
+    .explain code {
+      background: var(--tag-soft);
+      color: var(--tag);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .88em
+    }
+
+    /* anteprima: sempre sotto il codice */
+    .pv-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin: 18px 0 6px
+    }
+
+    .anteprima {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.4;
+      color: #000
+    }
+
+    .stretta {
+      max-width: 520px
+    }
+
+    .dati {
+      margin-top: 12px;
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      background: #fff;
+      padding: 12px 16px
+    }
+
+    .dati-t {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--tag);
+      margin-bottom: 4px
+    }
+
+    .dati pre {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 13px;
+      white-space: pre-wrap;
+      color: var(--ink-soft)
+    }
+
+    /* tabelle */
+    .tab-wrap {
+      overflow-x: auto;
+      margin-top: 18px
+    }
+
+    table.tabella {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: 15px
+    }
+
+    .tabella th,
+    .tabella td {
+      border: 1px solid var(--line);
+      padding: 9px 12px;
+      text-align: left;
+      vertical-align: top
+    }
+
+    .tabella th {
+      background: var(--paper-2);
+      font-family: var(--sans);
+      font-size: 13.5px
+    }
+
+    .tabella code {
+      background: var(--tag-soft);
+      color: var(--tag);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .88em
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main" class="skip-link">Vai al contenuto</a>
+
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="#top"><span class="brk">X1</span> · I Form</a>
+      <nav class="pillnav" id="pillnav" aria-label="Sezioni">
+        <a href="#tag-form">Il tag form</a>
+        <a href="#input-label">Input e label</a>
+        <a href="#controlli">Altri controlli</a>
+        <a href="#fieldset">Fieldset</a>
+        <a href="#validazione">Validazione</a>
+        <a href="#esempio">Esempio</a>
+        <a href="#stile">Stile</a>
+      </nav>
+      <a class="home" href="index.html">← Indice</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="hero" id="top">
+      <h1>I <span class="accent">Form</span></h1>
+      <p class="sub">L'interazione con l'utente. Per ora ci occupiamo soltanto della parte di creazione
+        dell'interfaccia.</p>
+      <div class="meta">
+        <span>Approfondimento</span>
+      </div>
+    </section>
+
+    <!-- 1 -->
+    <section id="tag-form">
+      <div class="section-head">
+        <div class="kicker">01 · il tag form</div>
+        <h2>Il contenitore di tutti i campi</h2>
+        <p class="lead">Tutti i campi di un modulo stanno dentro un elemento <code>&lt;form&gt;</code>. I suoi due
+          attributi principali dicono <strong>dove</strong> e <strong>come</strong> verranno spediti i dati: clicca le
+          parti del codice per scoprirle.</p>
+      </div>
+      <div id="a1-code"></div>
+      <div class="explain" id="a1-exp"></div>
+      <div class="tab-wrap">
+        <table class="tabella">
+          <tr>
+            <th>method</th>
+            <th>Dove finiscono i dati</th>
+            <th>Quando si usa</th>
+          </tr>
+          <tr>
+            <td><code>get</code></td>
+            <td>Nell'indirizzo, dopo il <code>?</code> — ad esempio <code>/cerca?parola=html</code></td>
+            <td>Ricerche e filtri: l'indirizzo si può salvare o condividere</td>
+          </tr>
+          <tr>
+            <td><code>post</code></td>
+            <td>Nel corpo della richiesta, non visibili nell'indirizzo</td>
+            <td>Login, registrazioni, dati personali</td>
+          </tr>
+        </table>
+      </div>
+      <div class="note-callout"><strong>Ricorda →</strong> per ora non abbiamo un server che riceve i dati, e va bene
+        così. Quando premi il pulsante di invio, il browser prova comunque a spedirli: con <code>method="get"</code>
+        puoi vedere nella barra degli indirizzi esattamente che cosa ha inviato.</div>
+    </section>
+
+    <!-- 2 -->
+    <section id="input-label">
+      <div class="section-head">
+        <div class="kicker">02 · input e label</div>
+        <h2>Il campo più usato e la sua etichetta</h2>
+        <p class="lead"><code>&lt;input&gt;</code> è un tag <strong>vuoto</strong>, come <code>&lt;img&gt;</code>: non
+          ha contenuto né tag di chiusura. Quasi sempre è accompagnato da una <code>&lt;label&gt;</code>, l'etichetta
+          che spiega che cosa scrivere. Suoi attributi fondamentali: <strong>type</strong>, <strong>id</strong>
+          e <strong>name</strong>.</p>
+      </div>
+      <div id="a2-code"></div>
+      <div class="explain" id="a2-exp"></div>
+
+      <h3 class="sotto">I tipi di input</h3>
+      <p class="lead">Lo stesso tag, con un <code>type</code> diverso, diventa un campo diverso. Scegli un tipo e prova
+        il campo nell'anteprima: su smartphone alcuni tipi aprono anche una tastiera dedicata.</p>
+      <div class="pill-toggle blocco" id="tipi"></div>
+      <div class="blocco" id="tipi-code"></div>
+      <p class="hint" id="tipi-hint"></p>
+      <div class="pv-label">anteprima</div>
+      <div class="anteprima" id="tipi-pv"></div>
+
+      <h3 class="sotto">Input per scegliere</h3>
+      <p class="lead">Anche radio e checkbox sono <code>&lt;input&gt;</code> con un <code>type</code> diverso, ma non
+        servono
+        a scrivere: servono a scegliere tra opzioni. Ogni opzione ha il suo <code>value</code> e una
+        <code>&lt;label&gt;</code> accanto.
+      </p>
+      <div class="pill-toggle blocco" id="scelte"></div>
+      <div class="blocco" id="scelte-code"></div>
+      <p class="hint" id="scelte-hint"></p>
+      <div class="pv-label">anteprima</div>
+      <div class="anteprima" id="scelte-pv"></div>
+      <div class="note-callout"><strong>Ricorda →</strong> i radio button funzionano in gruppo solo se hanno <strong>lo
+          stesso <code>name</code></strong>: è così che il browser sa che, scegliendone uno, deve deselezionare gli
+        altri. Per preselezionare un'opzione si usa <code>checked</code> (radio e checkbox).</div>
+    </section>
+
+    <!-- 3 -->
+    <section id="controlli">
+      <div class="section-head">
+        <div class="kicker">03 · altri controlli</div>
+        <h2>Testi lunghi, menu e pulsanti</h2>
+        <p class="lead">Oltre agli <code>&lt;input&gt;</code>, HTML ha tag specifici per
+          i testi lunghi, per scegliere da un elenco (<code>&lt;select&gt;</code>: come radio e checkbox serve a
+          scegliere, ma da un menu a tendina) e per inviare il modulo. Scegli un controllo per vedere codice e
+          risultato.</p>
+      </div>
+      <div class="pill-toggle" id="ctrl"></div>
+      <div class="blocco" id="ctrl-code"></div>
+      <p class="hint" id="ctrl-hint"></p>
+      <div class="pv-label">anteprima</div>
+      <div class="anteprima" id="ctrl-pv"></div>
+    </section>
+
+    <!-- 4 -->
+    <section id="fieldset">
+      <div class="section-head">
+        <div class="kicker">04 · fieldset e legend</div>
+        <h2>Raggruppare i campi che vanno insieme</h2>
+        <p class="lead"><code>&lt;fieldset&gt;</code> raggruppa campi che riguardano la stessa cosa;
+          <code>&lt;legend&gt;</code> dà un titolo al gruppo. Il browser disegna una cornice attorno al gruppo, e gli
+          screen reader leggono il titolo prima dei campi.
+        </p>
+      </div>
+      <div id="f4-code"></div>
+      <div class="pv-label">anteprima</div>
+      <div class="anteprima" id="f4-pv"></div>
+      <p class="hint">È particolarmente utile per i gruppi di radio e checkbox, dove la domanda è una sola e le risposte
+        sono più d'una: la <code>&lt;legend&gt;</code> fa da domanda, le <code>&lt;label&gt;</code> da risposte.</p>
+    </section>
+
+    <!-- 5 -->
+    <section id="validazione">
+      <div class="section-head">
+        <div class="kicker">05 · validazione</div>
+        <h2>Il browser controlla i dati prima di inviarli</h2>
+        <p class="lead">Basta aggiungere qualche attributo ai campi e il browser verifica da solo i dati inseriti. Se un
+          controllo non è superato, il form <strong>non parte</strong> e compare un messaggio vicino al campo sbagliato.
+        </p>
+      </div>
+      <div class="tab-wrap" style="margin-top:0">
+        <table class="tabella">
+          <tr>
+            <th>Attributo</th>
+            <th>Che cosa controlla</th>
+            <th>Esempio</th>
+          </tr>
+          <tr>
+            <td><code>required</code></td>
+            <td>Il campo non può restare vuoto</td>
+            <td><code>&lt;input type="email" name="email" required&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>minlength</code> / <code>maxlength</code></td>
+            <td>Numero minimo e massimo di caratteri</td>
+            <td><code>&lt;input type="password" minlength="8"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>min</code> / <code>max</code></td>
+            <td>Valore minimo e massimo (numeri, date)</td>
+            <td><code>&lt;input type="number" min="14" max="19"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>step</code></td>
+            <td>Di quanto può variare un numero</td>
+            <td><code>&lt;input type="number" step="0.5"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>pattern</code></td>
+            <td>Il testo deve seguire uno schema preciso</td>
+            <td><code>&lt;input pattern="[0-9]{5}"&gt;</code> (un CAP di 5 cifre)</td>
+          </tr>
+        </table>
+      </div>
+      <p class="hint" style="margin-top:22px">Mettiamolo alla prova: prova a inviare il modulo lasciando campi vuoti,
+        scrivendo un'email senza @ o un CAP di 4 cifre.</p>
+      <div class="blocco" id="v5-code"></div>
+      <div class="pv-label">anteprima · contatti.html</div>
+      <div class="anteprima" id="v5-pv" data-dati="v5-dati"></div>
+      <div class="dati" id="v5-dati">
+        <div class="dati-t">Dati inviati</div>
+        <pre>Ancora nulla: compila il modulo e premi Invia.</pre>
+      </div>
+      <div class="note-callout"><strong>Attenzione →</strong> questa validazione serve a dare un riscontro immediato a
+        chi compila il modulo, non a proteggere il sito: chiunque può aggirarla. Per questo i dati vanno sempre
+        ricontrollati anche dal lato server.</div>
+    </section>
+
+    <!-- 6 -->
+    <section id="esempio">
+      <div class="section-head">
+        <div class="kicker">06 · esempio completo</div>
+        <h2>Un modulo di iscrizione a un corso</h2>
+        <p class="lead">Mettiamo insieme tutto: form, input di tipi diversi, etichette, gruppi, menu a tendina, area di
+          testo, casella di consenso e validazione. Compila il modulo nell'anteprima e premi <strong>Iscriviti</strong>
+          per vedere quali dati verrebbero spediti.</p>
+      </div>
+      <div id="e6-code"></div>
+      <div class="pv-label">anteprima · iscrizione.html</div>
+      <div class="anteprima" id="e6-pv" data-dati="e6-dati"></div>
+      <div class="dati" id="e6-dati">
+        <div class="dati-t">Dati inviati</div>
+        <pre>Ancora nulla: compila il modulo e premi Iscriviti.</pre>
+      </div>
+      <p class="hint">Senza CSS i campi appaiono un po' disordinati: è normale, l'HTML si occupa solo della struttura.
+        Nella prossima sezione gli diamo un aspetto ordinato.</p>
+      <p class="hint">Osserva il riquadro <strong>Dati inviati</strong>: ogni riga è una coppia
+        <code>name = valore</code>. La checkbox, se spuntata, invia il valore <code>on</code>; un campo senza
+        <code>name</code> non comparirebbe affatto.
+      </p>
+    </section>
+
+    <!-- 7 -->
+    <section id="stile">
+      <div class="section-head">
+        <div class="kicker">07 · dare stile ai form</div>
+        <h2>Dal modulo disordinato a quello ordinato</h2>
+        <p class="lead">Bastano poche regole CSS, con i selettori che già conosci, per rendere un form leggibile:
+          etichette sopra i campi, campi tutti della stessa larghezza, un po' di spazio tra uno e l'altro. Premi i
+          pulsanti per confrontare il risultato.</p>
+      </div>
+      <div class="pill-toggle" id="stile-tg">
+        <button data-s="no">Senza CSS</button>
+        <button class="active" data-s="si">Con CSS</button>
+      </div>
+      <div class="blocco" id="s7-css"></div>
+      <div class="blocco" id="s7-html"></div>
+      <div class="pv-label">anteprima · contatti.html</div>
+      <div class="anteprima" id="s7-pv"></div>
+
+      <p class="hint" style="margin-top:26px">Due cose sono nuove. <code>display: block</code> sulla label la fa andare
+        a capo, così ogni etichetta sta sopra il suo campo. E dopo i due punti, nei selettori, compaiono le
+        <strong>pseudo-classi</strong>: indicano uno <strong>stato</strong> dell'elemento, non un elemento diverso.
+      </p>
+      <div class="tab-wrap">
+        <table class="tabella">
+          <tr>
+            <th>Pseudo-classe</th>
+            <th>Quando si applica</th>
+            <th>Prova nell'anteprima</th>
+          </tr>
+          <tr>
+            <td><code>:focus</code></td>
+            <td>Il campo è selezionato e pronto a ricevere testo</td>
+            <td>Clicca in un campo: il bordo diventa verde</td>
+          </tr>
+          <tr>
+            <td><code>:user-invalid</code></td>
+            <td>Il campo non supera la validazione, dopo che l'utente l'ha toccato</td>
+            <td>Scrivi un'email senza @ ed esci dal campo: il bordo diventa rosso</td>
+          </tr>
+          <tr>
+            <td><code>:hover</code></td>
+            <td>Il mouse è sopra l'elemento</td>
+            <td>Utile per i pulsanti, ad esempio per cambiarne il colore</td>
+          </tr>
+        </table>
+      </div>
+      <div class="note-callout"><strong>Ricorda →</strong> esiste anche <code>:invalid</code>, che però colora di rosso
+        i campi obbligatori fin dall'apertura della pagina, quando sono ancora vuoti. <code>:user-invalid</code> aspetta
+        che l'utente abbia interagito con il campo, ed è quasi sempre la scelta più gentile.</div>
+    </section>
+
+  </main>
+
+  <footer>
+    Materiale didattico basato su "Hashtag 2", Modulo B, Linguaggi per il web · Realizzato con l'assistenza di Claude
+    (Anthropic)
+  </footer>
+
+  <script>
+    /* ============ HELPERS (come nelle altre pagine) ============ */
+    function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    function hlCSSLine(line) {
+      var re = /(\/\*[\s\S]*?\*\/)|([^{}\/]+)\{|([a-zA-Z-]+)(\s*:\s*)([^;{}]*)(;?)|([{}])/g;
+      var out = '', last = 0, m;
+      while ((m = re.exec(line))) {
+        out += esc(line.slice(last, m.index));
+        if (m[1]) out += '<span class="m">' + esc(m[1]) + '</span>';
+        else if (m[2] !== undefined) out += '<span class="t">' + esc(m[2]) + '</span>{';
+        else if (m[3]) out += '<span class="c">' + esc(m[3]) + '</span>' + esc(m[4]) + '<span class="a">' + esc(m[5]) + '</span>' + esc(m[6]);
+        else out += esc(m[7]);
+        last = re.lastIndex;
+      }
+      return out + esc(line.slice(last));
+    }
+    function hlCSS(src) { return src.split('\n').map(hlCSSLine).join('\n'); }
+
+    function hlTags(s) {
+      var re = /<!DOCTYPE[^>]*>|<\/?[a-zA-Z][^>]*>/g;
+      var out = '', last = 0, m;
+      while ((m = re.exec(s))) {
+        out += esc(s.slice(last, m.index));
+        var tag = m[0];
+        if (tag.charAt(1) === '!') { out += '<span class="m">' + esc(tag) + '</span>'; }
+        else {
+          var p = /^(<\/?)([a-zA-Z0-9]+)([\s\S]*?)(\/?>)$/.exec(tag);
+          var attrs = esc(p[3]).replace(/([\w-]+)(=)("[^"]*")/g, '<span class="c">$1</span>$2<span class="a">$3</span>');
+          out += esc(p[1]) + '<span class="t">' + p[2] + '</span>' + attrs + esc(p[4]);
+        }
+        last = re.lastIndex;
+      }
+      return out + esc(s.slice(last));
+    }
+    function hlHTML(src) {
+      var parts = src.split(/(<style[^>]*>[\s\S]*?<\/style>)/);
+      return parts.map(function (part, i) {
+        if (i % 2 === 1) {
+          var m = /^(<style[^>]*>)([\s\S]*?)(<\/style>)$/.exec(part);
+          return hlTags(m[1]) + hlCSS(m[2]) + hlTags(m[3]);
+        }
+        return hlTags(part);
+      }).join('');
+    }
+    function codeBlock(title, bodyHtml) {
+      return '<div class="codeblock"><div class="cb-head"><i></i><i></i><i></i><span>' + title + '</span></div><pre class="cb-body">' + bodyHtml + '</pre></div>';
+    }
+    function $(id) { return document.getElementById(id); }
+
+    /* ============ NAV ACTIVE STATE ============ */
+    (function () {
+      var links = document.querySelectorAll('#pillnav a');
+      var sections = [].map.call(links, function (l) { return document.querySelector(l.getAttribute('href')); });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var id = '#' + e.target.id;
+            links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === id); });
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      sections.forEach(function (s) { if (s) io.observe(s); });
+      window.addEventListener('scroll', function () {
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+          var last = links[links.length - 1];
+          links.forEach(function (l) { l.classList.toggle('active', l === last); });
+        }
+      }, { passive: true });
+    })();
+
+    /* ============ ANTEPRIME (Shadow DOM: id e CSS non si mescolano con la pagina) ============ */
+    function showData(box, fd) {
+      var rows = [];
+      fd.forEach(function (v, k) { rows.push(k + ' = ' + (typeof v === 'string' ? v : (v.name || '(nessun file)'))); });
+      box.querySelector('pre').textContent = rows.length ? rows.join('\n') : '(nessun dato: i campi senza name non vengono inviati)';
+    }
+    function mount(host, html, css) {
+      var root = host.shadowRoot || host.attachShadow({ mode: 'open' });
+      root.innerHTML = '<style>' + (css || '') + '</style>' + (/<form[\s>]/.test(html) ? html : '<form>' + html + '</form>');
+      var form = root.querySelector('form');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var box = host.dataset.dati && $(host.dataset.dati);
+        if (box) showData(box, new FormData(form));
+      });
+    }
+
+    /* ============ CODICE CLICCABILE ============ */
+    /* sintassi: {parte|classe|testo} */
+    function tokens(src) {
+      var re = /\{(\w*)\|(\w*)\|([^}]*)\}/g, out = '', last = 0, m;
+      while ((m = re.exec(src))) {
+        out += esc(src.slice(last, m.index));
+        out += '<span' + (m[2] ? ' class="' + m[2] + '"' : '') + (m[1] ? ' data-part="' + m[1] + '"' : '') + '>' + esc(m[3]) + '</span>';
+        last = re.lastIndex;
+      }
+      return out + esc(src.slice(last));
+    }
+    function clickable(id, file, src, info) {
+      var code = $(id + '-code'), exp = $(id + '-exp');
+      code.innerHTML = codeBlock(file, tokens(src));
+      exp.innerHTML = '<p>Tocca una parte del codice per scoprire a cosa serve.</p>';
+      code.addEventListener('click', function (e) {
+        var el = e.target.closest('[data-part]'); if (!el) return;
+        var p = el.dataset.part;
+        [].forEach.call(code.querySelectorAll('[data-part]'), function (s) { s.classList.toggle('on', s.dataset.part === p); });
+        exp.innerHTML = '<h4>' + info[p][0] + '</h4><p>' + info[p][1] + '</p>';
+      });
+    }
+
+    /* ----- 1. il tag form ----- */
+    clickable('a1', 'iscrizione.html',
+      '{form|t|<form} {action|c|action}={action|a|"/iscrizione"} {method|c|method}={method|a|"post"}{form|t|>}\n  {campi||… campi …}\n{form|t|</form>}',
+      {
+        form: ['&lt;form&gt;', 'Il contenitore di tutti i campi. Da solo non mostra nulla: sono i campi al suo interno a comparire nella pagina.'],
+        action: ['action — dove', 'L\'indirizzo (URL) della risorsa che riceverà i dati. Se manca, i dati vanno alla pagina corrente.'],
+        method: ['method — come', 'Il modo in cui i dati partono: <code>get</code> (nell\'indirizzo) oppure <code>post</code> (nel corpo della richiesta). Vedi la tabella.'],
+        campi: ['I campi', 'Qui dentro vanno gli <code>&lt;input&gt;</code>, le <code>&lt;label&gt;</code>, i menu, le aree di testo e il pulsante di invio.']
+      });
+
+    /* ----- 2. input e label ----- */
+    clickable('a2', 'esempio.html',
+      '{label|t|<label} {for|c|for}={for|a|"nome"}{label|t|>}Nome{label|t|</label>}\n{input|t|<input} {type|c|type}={type|a|"text"} {id|c|id}={id|a|"nome"} {name|c|name}={name|a|"nome"} {placeholder|c|placeholder}={placeholder|a|"Mario"}{input|t|>}',
+      {
+        label: ['&lt;label&gt;', 'L\'etichetta che spiega cosa scrivere. Cliccando sul suo testo si seleziona il campo collegato.'],
+        for: ['for', 'Collega la label al campo: deve avere lo stesso valore dell\'<code>id</code> del campo.'],
+        input: ['&lt;input&gt;', 'Un tag vuoto, come <code>&lt;img&gt;</code>: nessun contenuto e nessun tag di chiusura. Cambia aspetto in base al <code>type</code>.'],
+        type: ['type', 'Il tipo di campo: <code>text</code>, <code>email</code>, <code>number</code>, <code>date</code>… Se manca, vale <code>text</code>.'],
+        id: ['id', 'Identificatore unico nella pagina: serve per collegare la label (e per il CSS).'],
+        name: ['name', 'Il nome con cui il dato viene spedito: <b>senza <code>name</code> il campo non viene inviato</b>.'],
+        placeholder: ['placeholder', 'Suggerimento grigio dentro il campo vuoto: non sostituisce la label e non viene inviato.']
+      });
+
+    /* tipi di input */
+    (function () {
+      var T = {
+        text: 'Testo su una riga: è il tipo predefinito.',
+        email: 'Il browser controlla che ci sia una @ prima di inviare.',
+        password: 'I caratteri digitati vengono nascosti.',
+        number: 'Solo numeri, con le freccette per aumentare o diminuire.',
+        date: 'Selettore di data del browser.',
+        tel: 'Numero di telefono: sullo smartphone compare la tastiera numerica.',
+        url: 'Il browser controlla che sia un indirizzo valido (con https://).',
+        color: 'Selettore di colore.',
+        range: 'Cursore per scegliere un valore in un intervallo.',
+        file: 'Scelta di un file dal proprio dispositivo.'
+      };
+      var tg = $('tipi');
+      Object.keys(T).forEach(function (k, i) {
+        var b = document.createElement('button'); b.textContent = k; if (i === 0) b.className = 'active';
+        b.addEventListener('click', function () {
+          [].forEach.call(tg.children, function (x) { x.classList.toggle('active', x === b); });
+          show(k);
+        });
+        tg.appendChild(b);
+      });
+      function show(k) {
+        var html = '<label for="campo">Campo ' + k + '</label>\n<input type="' + k + '" id="campo" name="campo">';
+        $('tipi-code').innerHTML = codeBlock('esempio.html', hlHTML(html));
+        $('tipi-hint').innerHTML = '<code>type="' + k + '"</code> — ' + T[k];
+        mount($('tipi-pv'), html);
+      }
+      show('text');
+    })();
+
+    /* input per scegliere (radio e checkbox) */
+    (function () {
+      var S = {
+        radio: {
+          hint: 'Una sola scelta in un gruppo: tutti i radio del gruppo hanno lo <strong>stesso name</strong> e un <code>value</code> diverso.',
+          code: '<input type="radio" id="base" name="livello" value="base" checked>\n<label for="base">Base</label>\n<input type="radio" id="avanzato" name="livello" value="avanzato">\n<label for="avanzato">Avanzato</label>'
+        },
+        checkbox: {
+          hint: 'Più scelte possibili: ogni checkbox è indipendente e invia il suo <code>value</code> solo se è spuntata (senza <code>value</code> invia <code>on</code>).',
+          code: '<input type="checkbox" id="i-html" name="interessi" value="html" checked>\n<label for="i-html">HTML</label>\n<input type="checkbox" id="i-css" name="interessi" value="css">\n<label for="i-css">CSS</label>'
+        }
+      };
+      var tg = $('scelte');
+      Object.keys(S).forEach(function (k, i) {
+        var b = document.createElement('button'); b.textContent = k; if (i === 0) b.className = 'active';
+        b.addEventListener('click', function () {
+          [].forEach.call(tg.children, function (x) { x.classList.toggle('active', x === b); });
+          show(k);
+        });
+        tg.appendChild(b);
+      });
+      function show(k) {
+        $('scelte-code').innerHTML = codeBlock('esempio.html', hlHTML(S[k].code));
+        $('scelte-hint').innerHTML = S[k].hint;
+        mount($('scelte-pv'), S[k].code);
+      }
+      show('radio');
+    })();
+
+    /* ----- 3. altri controlli ----- */
+    (function () {
+      var C = {
+        textarea: {
+          hint: 'Per testi su più righe. Non è un tag vuoto: apertura e chiusura racchiudono l\'eventuale testo iniziale. <code>rows</code> ne fissa l\'altezza in righe.',
+          code: '<label for="msg">Messaggio</label>\n<textarea id="msg" name="msg" rows="4"></textarea>'
+        },
+        select: {
+          hint: 'Menu a tendina: ogni scelta è un <code>&lt;option&gt;</code>. <code>value</code> è ciò che viene inviato, il testo tra i tag è ciò che si legge. <code>selected</code> preseleziona un\'opzione.',
+          code: '<label for="sede">Sede</label>\n<select id="sede" name="sede">\n  <option value="presenza">In presenza</option>\n  <option value="online" selected>Online</option>\n</select>'
+        },
+        button: {
+          hint: '<code>submit</code> invia il modulo (è il valore predefinito), <code>reset</code> riporta i campi ai valori iniziali, <code>button</code> non fa nulla da solo (va gestito con il Javascript).',
+          code: '<button type="submit">Invia</button>\n<button type="reset">Svuota</button>\n<button type="button">Non fa nulla</button>'
+        }
+      };
+      var tg = $('ctrl');
+      Object.keys(C).forEach(function (k, i) {
+        var b = document.createElement('button'); b.textContent = k; if (i === 0) b.className = 'active';
+        b.addEventListener('click', function () {
+          [].forEach.call(tg.children, function (x) { x.classList.toggle('active', x === b); });
+          show(k);
+        });
+        tg.appendChild(b);
+      });
+      function show(k) {
+        $('ctrl-code').innerHTML = codeBlock('esempio.html', hlHTML(C[k].code));
+        $('ctrl-hint').innerHTML = C[k].hint;
+        mount($('ctrl-pv'), C[k].code);
+      }
+      show('textarea');
+    })();
+
+    /* ----- 4. fieldset ----- */
+    (function () {
+      var html = '<fieldset>\n  <legend>Livello del corso</legend>\n  <input type="radio" id="base" name="livello" value="base">\n  <label for="base">Base</label>\n  <input type="radio" id="avanzato" name="livello" value="avanzato">\n  <label for="avanzato">Avanzato</label>\n</fieldset>';
+      $('f4-code').innerHTML = codeBlock('esempio.html', hlHTML(html));
+      mount($('f4-pv'), html);
+    })();
+
+    /* ----- 5. validazione ----- */
+    (function () {
+      var html = '<form action="/contatti" method="get">\n  <label for="email">Email</label>\n  <input type="email" id="email" name="email" required>\n\n  <label for="cap">CAP</label>\n  <input type="text" id="cap" name="cap" pattern="[0-9]{5}">\n\n  <button type="submit">Invia</button>\n</form>';
+      $('v5-code').innerHTML = codeBlock('contatti.html', hlHTML(html));
+      mount($('v5-pv'), html);
+    })();
+
+    /* ----- 6. esempio completo ----- */
+    (function () {
+      var html = '<form action="/iscrizione" method="post">\n\n  <fieldset>\n    <legend>Dati personali</legend>\n    <label for="nome">Nome</label>\n    <input type="text" id="nome" name="nome" required>\n    <br>\n    <label for="email">Email</label>\n    <input type="email" id="email" name="email" placeholder="nome@esempio.it" required>\n    <br>\n    <label for="nascita">Data di nascita</label>\n    <input type="date" id="nascita" name="nascita">\n  </fieldset>\n\n  <fieldset>\n    <legend>Livello del corso</legend>\n    <input type="radio" id="base" name="livello" value="base" checked>\n    <label for="base">Base</label>\n    <input type="radio" id="avanzato" name="livello" value="avanzato">\n    <label for="avanzato">Avanzato</label>\n  </fieldset>\n\n  <label for="sede">Sede</label>\n  <select id="sede" name="sede">\n    <option value="presenza">In presenza</option>\n    <option value="online">Online</option>\n  </select>\n  <br>\n  <label for="note">Note</label>\n  <textarea id="note" name="note" rows="3"></textarea>\n  <br>\n  <input type="checkbox" id="privacy" name="privacy" required>\n  <label for="privacy">Accetto l\'informativa sulla privacy</label>\n  <br>\n  <button type="submit">Iscriviti</button>\n</form>';
+      $('e6-code').innerHTML = codeBlock('iscrizione.html', hlHTML(html));
+      mount($('e6-pv'), html);
+    })();
+
+    /* ----- 7. dare stile ----- */
+    (function () {
+      var css = 'label {\n  display: block;\n  margin-top: 14px;\n  font-weight: bold;\n}\n\ninput, select, textarea {\n  width: 80%;\n  padding: 8px;\n  border: 1px solid #8a8577;\n  border-radius: 6px;\n  font-size: 15px;\n}\n\ninput:focus, select:focus, textarea:focus {\n  border-color: #0b6e4f;\n  outline: none;\n}\n\ninput:user-invalid {\n  border-color: #b7402f;\n}\n\nbutton {\n  margin-top: 18px;\n  padding: 10px 20px;\n  background-color: #0b6e4f;\n  color: white;\n  border: none;\n  border-radius: 6px;\n}';
+      var page = '<!DOCTYPE html>\n<html lang="it">\n<head>\n  <meta charset="utf-8">\n  <title>Contatti</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <form action="/contatti" method="get">\n    <label for="nome">Nome</label>\n    <input type="text" id="nome" name="nome">\n\n    <label for="email">Email</label>\n    <input type="email" id="email" name="email" required>\n\n    <label for="motivo">Motivo</label>\n    <select id="motivo" name="motivo">\n      <option>Informazioni</option>\n      <option>Iscrizione</option>\n      <option>Altro</option>\n    </select>\n\n    <label for="msg">Messaggio</label>\n    <textarea id="msg" name="msg" rows="4"></textarea>\n\n    <br><button type="submit">Invia</button>\n  </form>\n</body>\n</html>';
+      $('s7-css').innerHTML = codeBlock('style.css <em style="opacity:.7">· collegato con &lt;link&gt;</em>', hlCSS(css));
+      $('s7-html').innerHTML = codeBlock('contatti.html', hlHTML(page));
+      var body = page.split('<body>')[1].split('</body>')[0];
+      var tg = $('stile-tg').children;
+      function show(s) {
+        [].forEach.call(tg, function (b) { b.classList.toggle('active', b.dataset.s === s); });
+        mount($('s7-pv'), body, s === 'si' ? css : '');
+      }
+      [].forEach.call(tg, function (b) { b.addEventListener('click', function () { show(b.dataset.s); }); });
+      show('si');
+    })();
+  </script>
+</body>
+
+</html>
