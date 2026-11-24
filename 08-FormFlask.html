@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dai form a Python — Flask</title>
+  <meta name="description" content="Percorso interattivo: inviare dati da un form HTML a Python con Flask, simulato nel browser">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Solo ciò che manca in style.css (che va caricato prima) */
+    nav.pillnav {
+      flex: 1
+    }
+
+    .blocco {
+      margin-top: 20px
+    }
+
+    .note-callout {
+      margin-top: 20px
+    }
+
+    .note-callout code {
+      background: rgba(255, 255, 255, .6);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .9em
+    }
+
+    /* riquadri di codice */
+    .codeblock {
+      background: var(--ink);
+      color: #F4F1EA;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px -22px rgba(20, 18, 15, .6)
+    }
+
+    .cb-head {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid #3a362f;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #b9b3a4
+    }
+
+    .cb-head i {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #5b564c;
+      display: block
+    }
+
+    .cb-head span {
+      margin-left: 8px
+    }
+
+    .cb-body {
+      margin: 0;
+      padding: 14px 16px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow: auto;
+      white-space: pre;
+      tab-size: 2
+    }
+
+    .cb-body .t {
+      color: #7FD4A8
+    }
+
+    .cb-body .c {
+      color: #8FAEE0
+    }
+
+    .cb-body .a {
+      color: #E8C46A
+    }
+
+    .cb-body .m {
+      color: #8a8577
+    }
+
+    .cb-body .j {
+      color: #F0A8CC
+    }
+
+    /* anteprima, terminale e controlli */
+    .pv-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin: 18px 0 6px
+    }
+
+    .anteprima {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.4;
+      color: #000
+    }
+
+    .term {
+      margin-top: 12px;
+      background: #141311;
+      color: #b9b3a4;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space: pre-wrap;
+      min-height: 44px
+    }
+
+    .term .ok {
+      color: #7FD4A8
+    }
+
+    .term .ko {
+      color: #F0907F
+    }
+
+    .ctrl {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      margin-top: 20px
+    }
+
+    .ctrl .chk {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer
+    }
+
+    .stato {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin: 12px 0 0
+    }
+
+    .stato.ok {
+      background: var(--tag-soft);
+      color: var(--tag)
+    }
+
+    .stato.ko {
+      background: var(--brick-soft);
+      color: var(--brick)
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main" class="skip-link">Vai al contenuto</a>
+
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="#top"><span class="brk">X2</span> · Form in Flask</a>
+      <nav class="pillnav" id="pillnav" aria-label="Sezioni">
+        <a href="#form" class="active">Dai form a Python</a>
+      </nav>
+      <a class="home" href="index.html">← Indice</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="hero" id="top">
+      <h1>Dai <span class="accent">form</span> a Python</h1>
+      <p class="sub">Come ricevere ed elaborare i dati inseriti dall'utente in un modulo HTML tramite Flask.</p>
+      <div class="meta">
+        <span>Approfondimento</span>
+      </div>
+      <div class="note-callout">Gli esempi di questa pagina <strong>simulano</strong> Flask nel browser, per mostrarti
+        cosa succede passo per passo. Per provarlo davvero, devi eseguire il codice sul computer in locale.
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section id="form">
+      <div class="section-head">
+        <div class="kicker">06 · dai form a Python</div>
+        <h2>Python riceve i dati del modulo</h2>
+        <p class="lead">Quando un form usa <code>method="post"</code>, i dati compilati arrivano alla route e si leggono
+          con <code>request.form</code>. Compila il modulo e premi <strong>Invia</strong>.</p>
+      </div>
+      <div id="f-html"></div>
+      <div class="blocco" id="f-py"></div>
+      <div class="ctrl"><label class="chk"><input type="checkbox" id="f-noname"> Togli l'attributo <code>name</code> dal
+          campo</label><button class="btn ghost small" id="f-back">Ricarica la pagina (GET)</button></div>
+      <div class="pv-label">anteprima</div>
+      <div class="anteprima" id="f-pv"></div>
+      <span class="stato ok" id="f-stato">200 OK</span>
+      <div class="term" id="f-log"></div>
+      <div class="note-callout"><strong>Ricorda →</strong> senza <code>name</code> il browser non invia il campo (lo
+        abbiamo visto nella pagina sui form), e <code>request.form["nome"]</code> fallisce: Flask risponde con un errore
+        400. I dati ricevuti vanno <strong>sempre ricontrollati</strong> dal server, anche se nel form c'è
+        <code>required</code>.
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    Materiale interattivo per lo studio: gli esempi simulano Flask nel browser. Per eseguirlo davvero:
+    <code>pip install flask</code> e <code>python app.py</code>.
+  </footer>
+
+  <script>
+    /* ============ HELPERS ============ */
+    function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    function hlTags(s) {
+      var re = /<!DOCTYPE[^>]*>|<\/?[a-zA-Z][^>]*>/g;
+      var out = '', last = 0, m;
+      while ((m = re.exec(s))) {
+        out += esc(s.slice(last, m.index));
+        var tag = m[0];
+        if (tag.charAt(1) === '!') { out += '<span class="m">' + esc(tag) + '</span>'; }
+        else {
+          var p = /^(<\/?)([a-zA-Z0-9]+)([\s\S]*?)(\/?>)$/.exec(tag);
+          var attrs = esc(p[3]).replace(/([\w-]+)(=)("[^"]*")/g, '<span class="c">$1</span>$2<span class="a">$3</span>');
+          out += esc(p[1]) + '<span class="t">' + p[2] + '</span>' + attrs + esc(p[4]);
+        }
+        last = re.lastIndex;
+      }
+      return out + esc(s.slice(last));
+    }
+
+    function hlHTML(src) {
+      return hlTags(src);
+    }
+
+    function codeBlock(title, bodyHtml) {
+      return '<div class="codeblock"><div class="cb-head"><i></i><i></i><i></i><span>' + title + '</span></div><pre class="cb-body">' + bodyHtml + '</pre></div>';
+    }
+
+    function $(id) { return document.getElementById(id); }
+
+    function hlPy(src) {
+      var KW = /^(from|import|def|return|if|elif|else|for|in|and|or|not|True|False|None|with|as)$/;
+      var re = /(#.*)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(@[\w.]+)|([A-Za-z_]\w*)|(\d+)/g;
+      var out = '', last = 0, m, afterDef = false;
+      while ((m = re.exec(src))) {
+        out += esc(src.slice(last, m.index));
+        if (m[1]) out += '<span class="m">' + esc(m[1]) + '</span>';
+        else if (m[2]) out += '<span class="a">' + esc(m[2]) + '</span>';
+        else if (m[3]) out += '<span class="t">' + esc(m[3]) + '</span>';
+        else if (m[4]) {
+          if (KW.test(m[4])) out += '<span class="t">' + m[4] + '</span>';
+          else if (afterDef || src.charAt(re.lastIndex) === '(') out += '<span class="c">' + m[4] + '</span>';
+          else out += m[4];
+          afterDef = (m[4] === 'def');
+        } else out += '<span class="a">' + m[5] + '</span>';
+        last = re.lastIndex;
+      }
+      return out + esc(src.slice(last));
+    }
+
+    function hlJinja(src) {
+      return hlHTML(src).replace(/(\{\{[\s\S]*?\}\}|\{%[\s\S]*?%\})/g, '<span class="j">$1</span>');
+    }
+
+    function jinja(t, ctx) {
+      return t.replace(/\{\{\s*(.+?)\s*\}\}/g, function (_, e) {
+        var v = ctx[e.trim()];
+        return v == null ? '' : esc(String(v));
+      });
+    }
+
+    function show(host, html) {
+      var root = host.shadowRoot || host.attachShadow({ mode: 'open' });
+      root.innerHTML = html;
+      return root;
+    }
+
+    function log(el, method, path, code, keep) {
+      var line = '127.0.0.1 - - "' + method + ' ' + path + ' HTTP/1.1" <span class="' + (code < 400 ? 'ok' : 'ko') + '">' + code + '</span> -';
+      var lines = el.dataset.l ? el.dataset.l.split('\n') : [];
+      lines.push(line); lines = lines.slice(-(keep || 5));
+      el.dataset.l = lines.join('\n'); el.innerHTML = lines.join('\n');
+    }
+
+    /* ----- 6. dai form a Python ----- */
+    (function () {
+      var py = '@app.route("/saluta", methods=["GET", "POST"])\ndef saluta():\n    if request.method == "POST":\n        nome = request.form["nome"]\n        return render_template("risposta.html", nome=nome)\n    return render_template("form.html")';
+      var resp = '<h2>Ciao, {{ nome }}!</h2>\n<p>Il server ha ricevuto il tuo nome.</p>';
+      var noName = $('f-noname'), logEl = $('f-log'), stato = $('f-stato');
+      function formHtml() {
+        return '<form action="/saluta" method="post">\n  <label for="nome">Come ti chiami?</label>\n  <input type="text" id="nome"' + (noName.checked ? '' : ' name="nome"') + '>\n  <button type="submit">Invia</button>\n</form>';
+      }
+      function setStato(code, text) { stato.textContent = code + ' ' + text; stato.className = 'stato ' + (code < 400 ? 'ok' : 'ko'); }
+      function showForm(logGet) {
+        var html = formHtml();
+        $('f-html').innerHTML = codeBlock('templates/form.html', hlHTML(html)) + '<div class="blocco">' + codeBlock('templates/risposta.html', hlJinja(resp)) + '</div>';
+        $('f-py').innerHTML = codeBlock('app.py', hlPy(py));
+        var root = show($('f-pv'), html);
+        root.querySelector('form').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var inp = root.getElementById('nome');
+          if (inp.hasAttribute('name')) {
+            show($('f-pv'), jinja(resp, { nome: inp.value }));
+            setStato(200, 'OK'); log(logEl, 'POST', '/saluta', 200);
+          } else {
+            show($('f-pv'), '<h1>Bad Request</h1><p>The browser (or proxy) sent a request that this server could not understand.</p>');
+            setStato(400, 'Bad Request'); log(logEl, 'POST', '/saluta', 400);
+          }
+        });
+        if (logGet) { setStato(200, 'OK'); log(logEl, 'GET', '/saluta', 200); }
+      }
+      noName.addEventListener('change', function () { showForm(true); });
+      $('f-back').addEventListener('click', function () { showForm(true); });
+      showForm(true);
+    })();
+  </script>
+</body>
+
+</html>

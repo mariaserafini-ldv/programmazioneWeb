@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Introduzione a Flask — da HTML a Python</title>
+  <meta name="description" content="Percorso interattivo: primi passi, route e template in Flask, simulati nel browser">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Solo ciò che manca in style.css (che va caricato prima) */
+    nav.pillnav {
+      flex: 1
+    }
+
+    .blocco {
+      margin-top: 20px
+    }
+
+    .sotto {
+      font-size: 20px;
+      margin: 34px 0 8px;
+      font-weight: 600
+    }
+
+    .hint {
+      font-family: var(--sans);
+      font-size: 14.5px;
+      color: var(--ink-soft);
+      margin: 14px 0 0
+    }
+
+    .note-callout {
+      margin-top: 20px
+    }
+
+    .note-callout code {
+      background: rgba(255, 255, 255, .6);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .9em
+    }
+
+    /* riquadri di codice (come nelle altre pagine) */
+    .codeblock {
+      background: var(--ink);
+      color: #F4F1EA;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px -22px rgba(20, 18, 15, .6)
+    }
+
+    .cb-head {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid #3a362f;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #b9b3a4
+    }
+
+    .cb-head i {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #5b564c;
+      display: block
+    }
+
+    .cb-head span {
+      margin-left: 8px
+    }
+
+    .cb-body {
+      margin: 0;
+      padding: 14px 16px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow: auto;
+      white-space: pre;
+      tab-size: 2
+    }
+
+    .cb-body .t {
+      color: #7FD4A8
+    }
+
+    .cb-body .c {
+      color: #8FAEE0
+    }
+
+    .cb-body .a {
+      color: #E8C46A
+    }
+
+    .cb-body .m {
+      color: #8a8577
+    }
+
+    .cb-body .j {
+      color: #F0A8CC
+    }
+
+    .cb-body [data-part] {
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background .15s
+    }
+
+    .cb-body [data-part]:hover {
+      background: rgba(255, 255, 255, .12)
+    }
+
+    .cb-body [data-part].on,
+    .cb-body [data-r].on {
+      background: rgba(226, 164, 0, .28)
+    }
+
+    .explain {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 16px 20px;
+      margin-top: 14px;
+      min-height: 84px
+    }
+
+    .explain h4 {
+      margin: 0 0 6px;
+      font-size: 17px
+    }
+
+    .explain p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--ink-soft)
+    }
+
+    .explain code {
+      background: var(--tag-soft);
+      color: var(--tag);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .88em
+    }
+
+    /* anteprima, terminale e controlli */
+    .pv-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin: 18px 0 6px
+    }
+
+    .anteprima {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.4;
+      color: #000
+    }
+
+    .term {
+      margin-top: 12px;
+      background: #141311;
+      color: #b9b3a4;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space: pre-wrap;
+      min-height: 44px
+    }
+
+    .term .ok {
+      color: #7FD4A8
+    }
+
+    .term .ko {
+      color: #F0907F
+    }
+
+    .ctrl {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      margin-top: 20px
+    }
+
+    .ctrl label {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px
+    }
+
+    .ctrl input[type=text],
+    .ctrl input[type=number],
+    .ctrl textarea {
+      font: inherit;
+      font-size: 15px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff
+    }
+
+    .ctrl input[type=range] {
+      accent-color: var(--tag);
+      width: 260px
+    }
+
+    .ctrl .chk {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer
+    }
+
+    .stato {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin: 12px 0 0
+    }
+
+    .stato.ok {
+      background: var(--tag-soft);
+      color: var(--tag)
+    }
+
+    .stato.ko {
+      background: var(--brick-soft);
+      color: var(--brick)
+    }
+
+    .url {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .url code {
+      font-size: 13px;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 6px 10px;
+      border-radius: 8px
+    }
+
+    /* Diagramma animato Client - Server */
+    .flow-box {
+      background: #fff;
+      border: 1px solid var(--line, #ded8cc);
+      border-radius: 14px;
+      padding: 20px;
+      margin: 18px 0;
+      box-shadow: 0 10px 26px -20px rgba(20, 18, 15, .45);
+    }
+
+    .flow-toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .flow-btn {
+      font-family: var(--sans, sans-serif);
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line, #ded8cc);
+      background: #f7f4ed;
+      cursor: pointer;
+      transition: transform .1s, background .15s;
+    }
+
+    .flow-btn:hover {
+      background: #ede8dc;
+    }
+
+    .flow-btn.primary {
+      background: var(--tag, #2d6a4f);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .flow-btn.primary:hover {
+      filter: brightness(1.08);
+    }
+
+    .flow-step-badge {
+      margin-left: auto;
+      font-family: var(--mono, monospace);
+      font-size: 12px;
+      color: var(--ink-soft, #5b564c);
+    }
+
+    .flow-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      background: #faf8f3;
+      border: 1px solid #ece6d8;
+    }
+
+    .flow-caption {
+      margin-top: 12px;
+      padding: 12px 15px;
+      border-radius: 10px;
+      background: #f4f1ea;
+      font-size: 14.5px;
+      line-height: 1.5;
+      min-height: 54px;
+    }
+
+    .flow-caption strong {
+      color: var(--tag, #2d6a4f);
+    }
+
+    @keyframes pulseGear {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.12);
+      }
+    }
+
+    .flask-working {
+      transform-origin: 575px 125px;
+      animation: pulseGear .7s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main" class="skip-link">Vai al contenuto</a>
+
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="#top"><span class="brk">X2</span> · Intro Flask</a>
+      <nav class="pillnav" id="pillnav" aria-label="Sezioni">
+        <a href="#dinamico">Definizioni</a>
+        <a href="#primo">Worklflow</a>
+        <a href="#route">Routes</a>
+        <a href="#template">Template</a>
+        <a href="#cicli">Liste e cicli</a>
+      </nav>
+      <a class="home" href="index.html">← Indice</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="hero" id="top">
+      <h1>Introduzione a <span class="accent">Flask</span></h1>
+      <p class="sub">Fino ad ora ogni pagina era un file HTML sempre uguale. Con Flask puoi creare
+        pagine che cambiano ogni volta che il browser le richiede.</p>
+      <div class="meta">
+        <span>Approfondimento</span>
+      </div>
+      <div class="note-callout">Gli esempi di questa pagina <strong>simulano</strong> Flask nel browser, per mostrarti
+        cosa succede passo per passo. Per provarlo davvero, devi eseguire il codice sul computer in locale.</p>
+      </div>
+    </section>
+
+    <!-- 1 -->
+    <section id="dinamico">
+      <div class="section-head">
+        <div class="kicker">01 · definizioni</div>
+        <h2>Statico o dinamico</h2>
+        <p class="lead">Una pagina <strong>statica</strong> è un file HTML che il server consegna così com'è. Una pagina
+          <strong>dinamica</strong> viene costruita al momento: lo stesso indirizzo può restituire risposte diverse.
+          Confronta i due casi.
+        </p>
+      </div>
+      <div class="pill-toggle" id="d1-tg">
+        <button data-m="st">Pagina statica</button>
+        <button class="active" data-m="dy">Pagina dinamica (Flask)</button>
+      </div>
+      <div class="ctrl" id="d1-ctrl">
+        <div><label for="d1-ora">Ora del server: <span id="d1-ora-v">9:00</span></label><input type="range" id="d1-ora"
+            min="0" max="23" value="9"></div>
+      </div>
+      <div class="blocco" id="d1-code"></div>
+      <div class="pv-label">quello che vede l'utente</div>
+      <div class="anteprima" id="d1-pv"></div>
+      <p class="hint" id="d1-hint"></p>
+    </section>
+
+    <!-- 2 -->
+    <section id="primo">
+      <div class="section-head">
+        <div class="kicker">02 · workflow</div>
+        <h2>Come lavorare con Flask</h2>
+        <p class="lead">Per passare da una pagina HTML statica a un sito dinamico, prepariamo un piccolo progetto
+          Python.
+          Segui i passaggi nell'ordine: installeremo Flask, organizzeremo i file, scriveremo il codice e infine
+          avvieremo il server per visitare il sito con il browser.</p>
+      </div>
+
+      <div class="blocco" id="installare">
+        <h3 class="sotto">1. Installare la libreria Flask</h3>
+        <p>Flask è una libreria (o meglio un <em> micro framework</em>) di Python: aggiunge al linguaggio gli strumenti
+          necessari per ricevere richieste HTTP
+          dal browser e costruire le risposte. Si installa una sola volta nell'ambiente Python che useremo per il
+          progetto.</p>
+        <div class="codeblock">
+          <div class="cb-head"><i></i><i></i><i></i><span>terminale</span></div>
+          <pre class="cb-body">pip install flask</pre>
+        </div>
+        <p class="hint">Il comando <code>pip</code> è il programma che installa le librerie Python. A scuola la libreria
+          è già installata.</p>
+      </div>
+
+      <div class="blocco" id="struttura">
+        <h3 class="sotto">2. Preparare la struttura delle cartelle</h3>
+        <p>Nella cartella del progetto predisponi <code>app.py</code> e le due cartelle che Flask
+          riconosce automaticamente:</p>
+        <div class="codeblock">
+          <div class="cb-head"><i></i><i></i><i></i><span>struttura del progetto</span></div>
+          <pre class="cb-body">mio_progetto/
+│
+├── app.py
+│
+├── templates/
+│   └── index.html
+│
+└── static/
+    └── style.css</pre>
+        </div>
+        <ul>
+          <li><code>templates/</code> contiene i file HTML che Flask userà come modelli di pagina;</li>
+          <li> <code>static/</code>
+            contiene i file statici, per esempio fogli CSS, immagini e JavaScript.</li>
+        </ul>
+        <div class="note-callout">I nomi <strong>templates</strong> e
+          <strong>static</strong> vanno scritti esattamente così, perché Flask li cerca in queste posizioni per
+          impostazione predefinita.
+        </div>
+      </div>
+
+      <div class="blocco" id="file">
+        <h3 class="sotto">3. Creare i file del progetto</h3>
+        <p>Il file Python definisce l'applicazione e la pagina da restituire. I file HTML e CSS restano separati:
+          in questo modo possiamo occuparci della logica con Python e della presentazione con HTML e CSS.</p>
+        <div id="a1-code"></div>
+        <div class="explain" id="a1-exp"></div>
+        <div class="blocco">
+          <div class="codeblock">
+            <div class="cb-head"><i></i><i></i><i></i><span>templates/index.html</span></div>
+            <pre class="cb-body"><span class="t">&lt;!DOCTYPE html&gt;</span>
+<span class="t">&lt;html lang="it"&gt;</span>
+<span class="t">&lt;head&gt;</span>
+  <span class="t">&lt;meta charset="UTF-8"&gt;</span>
+  <span class="t">&lt;link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"&gt;</span>
+  <span class="t">&lt;title&gt;</span>Il mio primo sito<span class="t">&lt;/title&gt;</span>
+<span class="t">&lt;/head&gt;</span>
+<span class="t">&lt;body&gt;</span>
+  <span class="t">&lt;h1&gt;</span>Ciao dal mio sito!<span class="t">&lt;/h1&gt;</span>
+  <span class="t">&lt;p&gt;</span>La pagina è stata inviata da Flask.<span class="t">&lt;/p&gt;</span>
+<span class="t">&lt;/body&gt;</span>
+<span class="t">&lt;/html&gt;</span></pre>
+          </div>
+        </div>
+        <div class="blocco">
+          <div class="codeblock">
+            <div class="cb-head"><i></i><i></i><i></i><span>static/style.css</span></div>
+            <pre class="cb-body">body {
+  font-family: Arial, sans-serif;
+  margin: 40px;
+}
+h1 {
+  color: steelblue;
+}</pre>
+          </div>
+        </div>
+        <div class="note-callout"><strong>Da ricordare →</strong> il codice Python viene eseguito sul
+          <strong>server</strong>.
+          Il browser riceve la risposta HTML e interpreta HTML e CSS sul <strong>client</strong> (cioè il dispositivo
+          dell'utente). Il browser non riceve né esegue il codice Python di <code>app.py</code>.
+        </div>
+      </div>
+
+      <div class="blocco" id="server">
+        <h3 class="sotto">4. Avviare il server Flask</h3>
+        <p>Apri il terminale nella cartella principale del progetto, quella in cui si trova <code>app.py</code>, e
+          lancia:</p>
+        <div id="a1-term"></div>
+        <p>Il server è un programma in esecuzione sul tuo computer che resta in ascolto delle richieste del browser.
+          Quando riceve una richiesta per un indirizzo gestito dall'applicazione, Flask esegue la funzione associata
+          alla route e invia al browser la risposta prodotta.</p>
+        <p class="hint"><code>127.0.0.1</code> indica il computer su cui stai lavorando (localhost); <code>5000</code>
+          è la porta usata in questo esempio. Finché il server è attivo, il terminale resta occupato: per fermarlo,
+          torna nel terminale e premi <code>CTRL+C</code>.</p>
+      </div>
+
+      <div class="blocco" id="browser">
+        <h3 class="sotto">5. Visualizzare il sito nel browser</h3>
+        <p>Apri il browser e digita l'indirizzo mostrato dal terminale:</p>
+        <div class="url blocco"><code>http://127.0.0.1:5000</code></div>
+
+
+        Premi
+        <strong>Avvia animazione</strong> (o procedi un passo alla volta) per seguire il viaggio tra client e server:
+        </p>
+
+        <div class="flow-box">
+          <div class="flow-toolbar">
+            <button class="flow-btn primary" id="fl-play">▶ Avvia animazione</button>
+            <button class="flow-btn" id="fl-next">Passo successivo →</button>
+            <button class="flow-btn" id="fl-reset">↺ Reset</button>
+            <span class="flow-step-badge" id="fl-badge">Pronto · Passo 0/4</span>
+          </div>
+
+          <svg class="flow-svg" viewBox="0 0 760 250" role="img"
+            aria-label="Schema animato della comunicazione tra Browser e Server Flask">
+            <!-- Linee di connessione -->
+            <line x1="255" y1="95" x2="505" y2="95" stroke="#d5cebe" stroke-width="3" stroke-dasharray="6 6" />
+            <line x1="255" y1="165" x2="505" y2="165" stroke="#d5cebe" stroke-width="3" stroke-dasharray="6 6" />
+            <text x="380" y="80" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11"
+              fill="#7a7365">Richiesta HTTP →</text>
+            <text x="380" y="190" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11"
+              fill="#7a7365">← Risposta HTTP</text>
+
+            <!-- CLIENT (Browser) -->
+            <g id="fl-client">
+              <rect x="25" y="30" width="230" height="190" rx="12" fill="#ffffff" stroke="#2c2a25" stroke-width="2" />
+              <rect x="25" y="30" width="230" height="32" rx="12" fill="#2c2a25" />
+              <circle cx="43" cy="46" r="4" fill="#F0907F" />
+              <circle cx="56" cy="46" r="4" fill="#E8C46A" />
+              <circle cx="69" cy="46" r="4" fill="#7FD4A8" />
+              <text x="145" y="50" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="12"
+                font-weight="700" fill="#fff">CLIENT (Browser)</text>
+              <!-- Barra URL -->
+              <rect x="38" y="72" width="204" height="24" rx="6" fill="#f2efe7" stroke="#d5cebe" />
+              <text x="46" y="88" font-family="JetBrains Mono, monospace" font-size="10.5"
+                fill="#2c2a25">http://127.0.0.1:5000/</text>
+              <!-- Viewport pagina -->
+              <rect id="fl-screen" x="38" y="106" width="204" height="100" rx="6" fill="#faf8f3" stroke="#e2dccf" />
+              <text id="fl-screen-wait" x="140" y="160" text-anchor="middle" font-family="Space Grotesk, sans-serif"
+                font-size="12" fill="#8a8577">In attesa di risposta...</text>
+              <g id="fl-screen-page" opacity="0">
+                <text x="50" y="135" font-family="Arial, sans-serif" font-size="15" font-weight="700"
+                  fill="#4682B4">Ciao dal mio sito!</text>
+
+              </g>
+            </g>
+
+            <!-- SERVER (Flask) -->
+            <g id="fl-server">
+              <rect x="505" y="30" width="230" height="190" rx="12" fill="#1e1c18" stroke="#2c2a25" stroke-width="2" />
+              <rect x="505" y="30" width="230" height="32" rx="12" fill="#3a362f" />
+              <text x="620" y="50" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="12"
+                font-weight="700" fill="#7FD4A8">SERVER (Python + Flask)</text>
+              <!-- Box app.py -->
+              <rect id="fl-pybox" x="520" y="74" width="200" height="62" rx="8" fill="#2a2722" stroke="#5b564c" />
+              <text x="532" y="94" font-family="JetBrains Mono, monospace" font-size="11" fill="#E8C46A">app.py</text>
+              <text x="532" y="112" font-family="JetBrains Mono, monospace" font-size="10.5"
+                fill="#8FAEE0">@app.route("/") → home()</text>
+              <text id="fl-gear" x="698" y="126" font-size="18" opacity="0.35">⚙️</text>
+              <!-- Box templates -->
+              <rect id="fl-tplbox" x="520" y="146" width="200" height="58" rx="8" fill="#2a2722" stroke="#5b564c" />
+              <text x="532" y="166" font-family="JetBrains Mono, monospace" font-size="11"
+                fill="#F0A8CC">templates/index.html</text>
+              <text x="532" y="185" font-family="JetBrains Mono, monospace" font-size="10.5"
+                fill="#b9b3a4">&lt;h1&gt;Ciao dal mio sito!&lt;/h1&gt;</text>
+            </g>
+
+            <!-- Pacchetto RICHIESTA -->
+            <g id="fl-req" transform="translate(260, 77)" opacity="0">
+              <rect x="0" y="0" width="112" height="34" rx="8" fill="#E8C46A" stroke="#2c2a25" stroke-width="1.5" />
+              <text x="56" y="15" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10"
+                font-weight="700" fill="#1e1c18">GET / HTTP</text>
+              <text x="56" y="27" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="9.5"
+                fill="#1e1c18">Dammi la home!</text>
+            </g>
+
+            <!-- Pacchetto RISPOSTA -->
+            <g id="fl-res" transform="translate(390, 148)" opacity="0">
+              <rect x="0" y="0" width="112" height="34" rx="8" fill="#7FD4A8" stroke="#2c2a25" stroke-width="1.5" />
+              <text x="56" y="15" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10"
+                font-weight="700" fill="#1e1c18">200 OK · HTML</text>
+              <text x="56" y="27" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="9.5"
+                fill="#1e1c18">&lt;h1&gt;Ciao...&lt;/h1&gt;</text>
+            </g>
+          </svg>
+
+          <div class="flow-caption" id="fl-cap">
+            Premi <strong>Avvia animazione</strong> per vedere come il browser chiede una pagina e come Flask costruisce
+            la risposta.
+          </div>
+        </div>
+
+        <div class="note-callout"><strong>Client e server non sono la stessa cosa →</strong> il client è il programma
+          che richiede e visualizza la pagina (il browser); il server è il programma che riceve la richiesta e prepara
+          la risposta. Nei primi esercizi avremo client e server sullo stesso computer, ma in un sito
+          reale sono su dispositivi diversi (spesso molto lontani).</div>
+      </div>
+
+
+
+    </section>
+
+    <!-- 3 -->
+    <section id="route">
+      <div class="section-head">
+        <div class="kicker">03 · routes</div>
+        <h2>Ogni indirizzo ha la sua funzione</h2>
+        <p class="lead">Con <code>@app.route</code> si collega un indirizzo (URL) a una funzione Python: la funzione
+          sceglie cosa rispondere. Scrivi un indirizzo nel browser simulato, oppure scegline uno, e osserva quale
+          funzione viene eseguita.</p>
+      </div>
+      <div id="r-code"></div>
+      <div class="ctrl">
+        <div>
+          <label for="r-url">Indirizzo nel browser</label>
+          <div class="url"><code>http://127.0.0.1:5000</code><input type="text" id="r-url" value="/" size="14"
+              spellcheck="false"><button class="btn small" id="r-go">Vai</button></div>
+        </div>
+      </div>
+      <div class="url blocco" id="r-chips"></div>
+      <div class="pv-label">anteprima</div>
+      <div class="anteprima" id="r-pv"></div>
+      <div class="pv-label">terminale di Flask</div>
+      <div class="term" id="r-log"></div>
+      <div class="note-callout"><strong>Provalo →</strong> scrivi <code>/chi-sono/</code> con la barra finale, oppure
+        <code>/Chi-sono</code>: Flask distingue l'indirizzo esatto e risponde <strong>404 Not Found</strong>.
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section id="template">
+      <div class="section-head">
+        <div class="kicker">04 · template</div>
+        <h2>Dai dati Python alla pagina HTML</h2>
+        <p class="lead">Scrivere l'HTML dentro Python diventa presto scomodo. Con <code>render_template</code> l'HTML
+          sta in un file a parte (il <strong>template</strong>) e Python gli passa i dati: nel template compaiono come
+          <code>{{ nome }}</code>, e con <code>{% if %}</code> si può scegliere cosa mostrare.
+        </p>
+      </div>
+      <div class="ctrl">
+        <div><label for="t-nome">nome</label><input type="text" id="t-nome" value="Giulia" size="14"></div>
+        <div><label for="t-eta">eta</label><input type="number" id="t-eta" value="16" min="0" max="99"
+            style="width:80px"></div>
+      </div>
+      <div class="blocco" id="t-py"></div>
+      <div class="blocco" id="t-tpl"></div>
+      <div class="pv-label">HTML prodotto · quello che vede l'utente</div>
+      <div class="anteprima" id="t-pv"></div>
+      <p class="hint">Prova a scrivere <code>&lt;b&gt;ciao&lt;/b&gt;</code> come nome: Flask lo mostra come testo, non
+        lo interpreta come HTML. Si chiama <em>autoescape</em> e impedisce a chi compila un modulo di inserire codice
+        nelle tue pagine.</p>
+    </section>
+
+    <!-- 5 -->
+    <section id="cicli">
+      <div class="section-head">
+        <div class="kicker">05 · liste e cicli</div>
+        <h2>Una lista Python diventa una lista HTML</h2>
+        <p class="lead">Con <code>{% for %}</code> il template ripete un pezzo di HTML per ogni elemento di una lista. È
+          il passaggio chiave per la dinamicità e la gestione di elementi multipli: un elenco diventa un elenco
+          di schede, senza scrivere l'HTML a
+          mano.</p>
+      </div>
+      <div class="ctrl">
+        <div><label for="c-lista">elementi (uno per riga)</label><textarea id="c-lista" rows="4" cols="22"
+            spellcheck="false">HTML
+CSS
+Flask</textarea></div>
+      </div>
+      <div class="blocco" id="c-py"></div>
+      <div class="blocco" id="c-tpl"></div>
+      <div class="pv-label">quello che vede l'utente</div>
+      <div class="anteprima" id="c-pv"></div>
+    </section>
+
+  </main>
+
+  <footer>
+    Materiale didattico di approfondimento sui Linguaggi per il web · Realizzato con l'assistenza di Claude
+    (Anthropic)
+  </footer>
+  <script>
+    /* ============ HELPERS (come nelle altre pagine) ============ */
+    function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    function hlCSSLine(line) {
+      var re = /(\/\*[\s\S]*?\*\/)|([^{}\/]+)\{|([a-zA-Z-]+)(\s*:\s*)([^;{}]*)(;?)|([{}])/g;
+      var out = '', last = 0, m;
+      while ((m = re.exec(line))) {
+        out += esc(line.slice(last, m.index));
+        if (m[1]) out += '<span class="m">' + esc(m[1]) + '</span>';
+        else if (m[2] !== undefined) out += '<span class="t">' + esc(m[2]) + '</span>{';
+        else if (m[3]) out += '<span class="c">' + esc(m[3]) + '</span>' + esc(m[4]) + '<span class="a">' + esc(m[5]) + '</span>' + esc(m[6]);
+        else out += esc(m[7]);
+        last = re.lastIndex;
+      }
+      return out + esc(line.slice(last));
+    }
+    function hlCSS(src) { return src.split('\n').map(hlCSSLine).join('\n'); }
+
+    function hlTags(s) {
+      var re = /<!DOCTYPE[^>]*>|<\/?[a-zA-Z][^>]*>/g;
+      var out = '', last = 0, m;
+      while ((m = re.exec(s))) {
+        out += esc(s.slice(last, m.index));
+        var tag = m[0];
+        if (tag.charAt(1) === '!') { out += '<span class="m">' + esc(tag) + '</span>'; }
+        else {
+          var p = /^(<\/?)([a-zA-Z0-9]+)([\s\S]*?)(\/?>)$/.exec(tag);
+          var attrs = esc(p[3]).replace(/([\w-]+)(=)("[^"]*")/g, '<span class="c">$1</span>$2<span class="a">$3</span>');
+          out += esc(p[1]) + '<span class="t">' + p[2] + '</span>' + attrs + esc(p[4]);
+        }
+        last = re.lastIndex;
+      }
+      return out + esc(s.slice(last));
+    }
+    function hlHTML(src) {
+      var parts = src.split(/(<style[^>]*>[\s\S]*?<\/style>)/);
+      return parts.map(function (part, i) {
+        if (i % 2 === 1) {
+          var m = /^(<style[^>]*>)([\s\S]*?)(<\/style>)$/.exec(part);
+          return hlTags(m[1]) + hlCSS(m[2]) + hlTags(m[3]);
+        }
+        return hlTags(part);
+      }).join('');
+    }
+    function codeBlock(title, bodyHtml) {
+      return '<div class="codeblock"><div class="cb-head"><i></i><i></i><i></i><span>' + title + '</span></div><pre class="cb-body">' + bodyHtml + '</pre></div>';
+    }
+    function $(id) { return document.getElementById(id); }
+
+    /* nuove: evidenziazione di Python e dei template Jinja */
+    function hlPy(src) {
+      var KW = /^(from|import|def|return|if|elif|else|for|in|and|or|not|True|False|None|with|as)$/;
+      var re = /(#.*)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(@[\w.]+)|([A-Za-z_]\w*)|(\d+)/g;
+      var out = '', last = 0, m, afterDef = false;
+      while ((m = re.exec(src))) {
+        out += esc(src.slice(last, m.index));
+        if (m[1]) out += '<span class="m">' + esc(m[1]) + '</span>';
+        else if (m[2]) out += '<span class="a">' + esc(m[2]) + '</span>';
+        else if (m[3]) out += '<span class="t">' + esc(m[3]) + '</span>';
+        else if (m[4]) {
+          if (KW.test(m[4])) out += '<span class="t">' + m[4] + '</span>';
+          else if (afterDef || src.charAt(re.lastIndex) === '(') out += '<span class="c">' + m[4] + '</span>';
+          else out += m[4];
+          afterDef = (m[4] === 'def');
+        } else out += '<span class="a">' + m[5] + '</span>';
+        last = re.lastIndex;
+      }
+      return out + esc(src.slice(last));
+    }
+    function hlJinja(src) {
+      return hlHTML(src).replace(/(\{\{[\s\S]*?\}\}|\{%[\s\S]*?%\})/g, '<span class="j">$1</span>');
+    }
+
+    /* mini "Jinja": solo variabili, if/else e for (basta per questi esempi) */
+    function ev(expr, ctx) {
+      expr = expr.trim();
+      var m = /^(.+?)\s*(>=|<=|==|!=|>|<)\s*(.+)$/.exec(expr);
+      if (m) {
+        var a = ev(m[1], ctx), b = ev(m[3], ctx);
+        return { '>=': a >= b, '<=': a <= b, '==': a == b, '!=': a != b, '>': a > b, '<': a < b }[m[2]];
+      }
+      if (/^-?\d+(\.\d+)?$/.test(expr)) return parseFloat(expr);
+      var s = /^(["'])(.*)\1$/.exec(expr); if (s) return s[2];
+      var v = ctx; expr.split('.').forEach(function (k) { v = (v == null) ? undefined : v[k]; });
+      return v;
+    }
+    function jinja(t, ctx) {
+      t = t.replace(/\{%\s*for (\w+) in (\w+)\s*%\}([\s\S]*?)\{%\s*endfor\s*%\}/g, function (_, v, l, body) {
+        return (ctx[l] || []).map(function (item) { var c = {}; for (var k in ctx) c[k] = ctx[k]; c[v] = item; return jinja(body, c); }).join('');
+      });
+      t = t.replace(/\{%\s*if (.+?)\s*%\}([\s\S]*?)(?:\{%\s*else\s*%\}([\s\S]*?))?\{%\s*endif\s*%\}/g, function (_, c, a, b) {
+        return ev(c, ctx) ? a : (b || '');
+      });
+      return t.replace(/\{\{\s*(.+?)\s*\}\}/g, function (_, e) { var v = ev(e, ctx); return v == null ? '' : esc(String(v)); });
+    }
+    function show(host, html) {
+      var root = host.shadowRoot || host.attachShadow({ mode: 'open' });
+      root.innerHTML = html;
+      return root;
+    }
+    function log(el, method, path, code, keep) {
+      var line = '127.0.0.1 - - "' + method + ' ' + path + ' HTTP/1.1" <span class="' + (code < 400 ? 'ok' : 'ko') + '">' + code + '</span> -';
+      var lines = el.dataset.l ? el.dataset.l.split('\n') : [];
+      lines.push(line); lines = lines.slice(-(keep || 5));
+      el.dataset.l = lines.join('\n'); el.innerHTML = lines.join('\n');
+    }
+
+    /* codice cliccabile: sintassi {parte|classe|testo} */
+    function tokens(src) {
+      var re = /\{(\w*)\|(\w*)\|([^}]*)\}/g, out = '', last = 0, m;
+      while ((m = re.exec(src))) {
+        out += esc(src.slice(last, m.index));
+        out += '<span' + (m[2] ? ' class="' + m[2] + '"' : '') + (m[1] ? ' data-part="' + m[1] + '"' : '') + '>' + esc(m[3]) + '</span>';
+        last = re.lastIndex;
+      }
+      return out + esc(src.slice(last));
+    }
+    function clickable(id, file, src, info) {
+      var code = $(id + '-code'), exp = $(id + '-exp');
+      code.innerHTML = codeBlock(file, tokens(src));
+      exp.innerHTML = '<p>Tocca una parte del codice per scoprire a cosa serve.</p>';
+      code.addEventListener('click', function (e) {
+        var el = e.target.closest('[data-part]'); if (!el) return;
+        var p = el.dataset.part;
+        [].forEach.call(code.querySelectorAll('[data-part]'), function (s) { s.classList.toggle('on', s.dataset.part === p); });
+        exp.innerHTML = '<h4>' + info[p][0] + '</h4><p>' + info[p][1] + '</p>';
+      });
+    }
+
+    /* ============ NAV ACTIVE STATE ============ */
+    (function () {
+      var links = document.querySelectorAll('#pillnav a');
+      var sections = [].map.call(links, function (l) { return document.querySelector(l.getAttribute('href')); });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var id = '#' + e.target.id;
+            links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === id); });
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      sections.forEach(function (s) { if (s) io.observe(s); });
+      window.addEventListener('scroll', function () {
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+          var last = links[links.length - 1];
+          links.forEach(function (l) { l.classList.toggle('active', l === last); });
+        }
+      }, { passive: true });
+    })();
+
+    /* ----- 1. statico o dinamico ----- */
+    (function () {
+      var st = '<h1>Buongiorno!</h1>\n<p>Questa pagina è sempre uguale.</p>';
+      var py = '@app.route("/")\ndef home():\n    ora = datetime.now().hour\n    if ora < 18:\n        saluto = "Buongiorno"\n    else:\n        saluto = "Buonasera"\n    return render_template("home.html", saluto=saluto)';
+      var tpl = '<h1>{{ saluto }}!</h1>\n<p>Questa pagina cambia in base all\'ora.</p>';
+      var mode = 'dy', tg = $('d1-tg').children, sl = $('d1-ora');
+      function render() {
+        var ora = +sl.value;
+        $('d1-ora-v').textContent = ora + ':00';
+        $('d1-ctrl').style.display = mode === 'dy' ? '' : 'none';
+        if (mode === 'st') {
+          $('d1-code').innerHTML = codeBlock('home.html', hlHTML(st));
+          show($('d1-pv'), st);
+          $('d1-hint').innerHTML = 'Il server consegna il file così com\'è: a qualunque ora, per qualunque utente, la risposta è identica.';
+        } else {
+          $('d1-code').innerHTML = codeBlock('app.py', hlPy(py)) + '<div class="blocco">' + codeBlock('templates/home.html', hlJinja(tpl)) + '</div>';
+          show($('d1-pv'), jinja(tpl, { saluto: ora < 18 ? 'Buongiorno' : 'Buonasera' }));
+          $('d1-hint').innerHTML = 'Il file HTML è lo stesso, ma Python decide cosa scrivere al posto di <code>{{ saluto }}</code>. Sposta il cursore sopra le 18.';
+        }
+      }
+      [].forEach.call(tg, function (b) {
+        b.addEventListener('click', function () {
+          mode = b.dataset.m;
+          [].forEach.call(tg, function (x) { x.classList.toggle('active', x === b); });
+          render();
+        });
+      });
+      sl.addEventListener('input', render);
+      render();
+    })();
+
+    /* ----- 2. il primo sito ----- */
+    clickable('a1', 'app.py',
+      '{imp|t|from} flask {imp|t|import} Flask, {imp|t|render_template}\n\n{app|c|app} = {app|c|Flask}({name|a|__name__})\n\n{route|t|@app.route}({url|a|"/"})\n{def|t|def} {def|c|home}():\n    {ret|t|return} {html|c|render_template}({html|a|"index.html"})\n\n{run|t|if} __name__ == {run|a|"__main__"}:\n    {run|c|app.run}(debug={run|t|True})',
+      {
+        imp: ['Importer Flask e render_template', 'Importa gli strumenti che useremo: <code>Flask</code> crea l’applicazione, mentre <code>render_template</code> carica un file HTML dalla cartella <code>templates/</code>.'],
+        app: ['Creare l’applicazione', '<code>app</code> rappresenta la nostra applicazione Flask.'],
+        name: ['__name__', 'È una variabile speciale di Python che permette a Flask di individuare il progetto e le cartelle convenzionali. Va scritta senza virgolette.'],
+        route: ['@app.route', 'Collega l’indirizzo <code>/</code> alla funzione scritta subito sotto. Quando il browser richiede la pagina principale, Flask esegue questa funzione.'],
+        url: ['L’indirizzo', '<code>"/"</code> indica la pagina principale del sito. Altri indirizzi, come <code>"/contatti"</code>, potranno essere associati ad altre funzioni.'],
+        def: ['La funzione', 'La funzione contiene le istruzioni che Flask esegue quando arriva una richiesta per l’indirizzo associato.'],
+        ret: ['return', 'La funzione restituisce la risposta che Flask invierà al browser.'],
+        html: ['render_template', 'Carica il file <code>index.html</code> dalla cartella <code>templates/</code> e lo prepara come risposta HTML.'],
+        run: ['Avviare il server', 'Avvia il server di sviluppo sul computer. <code>debug=True</code> è utile durante lo sviluppo perché mostra gli errori e ricarica l’applicazione quando il codice cambia. Non va usato in produzione.']
+      });
+    $('a1-term').innerHTML = codeBlock('terminale', 'python app.py\n<span class="m"> * Running on http://127.0.0.1:5000</span>\n\nApri nel browser: <span class="a">http://127.0.0.1:5000</span>');
+
+    /* ----- 3. più pagine ----- */
+    (function () {
+      var R = [
+        { path: '/', fn: 'home', html: '<h1>Benvenuti</h1>' },
+        { path: '/chi-sono', fn: 'chi_sono', html: '<h1>Chi sono</h1><p>Mi chiamo Giulia.</p>' },
+        { path: '/progetti', fn: 'progetti', html: '<h1>Progetti</h1><ul><li>Sito personale</li><li>Quiz</li></ul>' }
+      ];
+      var blocks = R.map(function (r, i) {
+        var src = '@app.route("' + r.path + '")\ndef ' + r.fn + '():\n    return "' + r.html + '"';
+        return '<span data-r="' + i + '">' + hlPy(src) + '</span>';
+      }).join('\n\n');
+      $('r-code').innerHTML = codeBlock('app.py', blocks);
+      var url = $('r-url'), logEl = $('r-log');
+      function go(p) {
+        p = (p || '/').trim(); if (p.charAt(0) !== '/') p = '/' + p;
+        url.value = p;
+        var idx = -1; R.forEach(function (r, i) { if (r.path === p) idx = i; });
+        [].forEach.call($('r-code').querySelectorAll('[data-r]'), function (s) { s.classList.toggle('on', +s.dataset.r === idx); });
+        if (idx >= 0) { show($('r-pv'), R[idx].html); log(logEl, 'GET', p, 200); }
+        else {
+          show($('r-pv'), '<h1>Not Found</h1><p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>');
+          log(logEl, 'GET', p, 404);
+        }
+      }
+      var chips = $('r-chips');
+      R.map(function (r) { return r.path; }).concat(['/contatti']).forEach(function (p) {
+        var b = document.createElement('button'); b.className = 'btn ghost small'; b.textContent = p;
+        b.addEventListener('click', function () { go(p); });
+        chips.appendChild(b);
+      });
+      $('r-go').addEventListener('click', function () { go(url.value); });
+      url.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(url.value); });
+      go('/');
+    })();
+
+    /* ----- 4. template ----- */
+    (function () {
+      var tpl = '<h2>Profilo di {{ nome }}</h2>\n{% if eta >= 18 %}\n  <p>{{ nome }} è maggiorenne.</p>\n{% else %}\n  <p>{{ nome }} è minorenne.</p>\n{% endif %}';
+      $('t-tpl').innerHTML = codeBlock('templates/profilo.html', hlJinja(tpl));
+      function render() {
+        var nome = $('t-nome').value, eta = parseInt($('t-eta').value, 10) || 0;
+        var py = '@app.route("/profilo")\ndef profilo():\n    return render_template("profilo.html", nome="' + nome.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '", eta=' + eta + ')';
+        $('t-py').innerHTML = codeBlock('app.py', hlPy(py));
+        show($('t-pv'), jinja(tpl, { nome: nome, eta: eta }));
+      }
+      $('t-nome').addEventListener('input', render); $('t-eta').addEventListener('input', render);
+      render();
+    })();
+
+    /* ----- 5. liste e cicli ----- */
+    (function () {
+      var tpl = '<ul>\n  {% for a in argomenti %}\n    <li>{{ a }}</li>\n  {% endfor %}\n</ul>';
+      $('c-tpl').innerHTML = codeBlock('templates/elenco.html', hlJinja(tpl));
+      function render() {
+        var items = $('c-lista').value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+        var lst = '[' + items.map(function (s) { return '"' + s.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'; }).join(', ') + ']';
+        var py = '@app.route("/elenco")\ndef elenco():\n    argomenti = ' + lst + '\n    return render_template("elenco.html", argomenti=argomenti)';
+        $('c-py').innerHTML = codeBlock('app.py', hlPy(py));
+        show($('c-pv'), items.length ? jinja(tpl, { argomenti: items }) : '<p><em>La lista è vuota: il ciclo non produce nessun elemento.</em></p>');
+      }
+      $('c-lista').addEventListener('input', render);
+      render();
+    })();
+
+    /* ----- animazione client-server (sezione 2.5) ----- */
+    (function () {
+      var step = 0, timer = null;
+      var req = $('fl-req'), res = $('fl-res'), gear = $('fl-gear');
+      var pyBox = $('fl-pybox'), tplBox = $('fl-tplbox');
+      var scrWait = $('fl-screen-wait'), scrPage = $('fl-screen-page');
+      var cap = $('fl-cap'), badge = $('fl-badge');
+
+      var desc = [
+        'Premi <strong>Avvia animazione</strong> per vedere come il browser chiede una pagina e come Flask costruisce la risposta.',
+        '<strong>1. Richiesta HTTP:</strong> il browser (client) invia una richiesta <code>GET /</code> verso l’indirizzo del server <code>127.0.0.1:5000</code>.',
+        '<strong>2. Esecuzione Python:</strong> Flask riceve la richiesta, trova la route <code>@app.route("/")</code> ed esegue la funzione <code>home()</code>.',
+        '<strong>3. Risposta HTML:</strong> <code>render_template</code> legge <code>index.html</code> e Flask spedisce indietro solo il risultato HTML (status <code>200 OK</code>).',
+        '<strong>4. Visualizzazione:</strong> il browser riceve HTML e CSS, li interpreta e disegna la pagina sullo schermo. Il codice Python resta nascosto sul server!'
+      ];
+
+      function animMove(el, fromX, toX, y, duration) {
+        el.setAttribute('opacity', '1');
+        var start = null;
+        function frame(ts) {
+          if (!start) start = ts;
+          var p = Math.min((ts - start) / duration, 1);
+          var ease = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p;
+          var x = fromX + (toX - fromX) * ease;
+          el.setAttribute('transform', 'translate(' + x.toFixed(1) + ', ' + y + ')');
+          if (p < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+
+      function applyStep(s) {
+        step = s;
+        badge.textContent = (s === 0 ? 'Pronto' : 'In corso') + ' · Passo ' + s + '/4';
+        cap.innerHTML = desc[s];
+
+        // reset stati visivi parziali
+        gear.classList.remove('flask-working');
+        gear.setAttribute('opacity', '0.35');
+        pyBox.setAttribute('stroke', '#5b564c');
+        tplBox.setAttribute('stroke', '#5b564c');
+
+        if (s === 0) {
+          req.setAttribute('opacity', '0');
+          res.setAttribute('opacity', '0');
+          scrWait.setAttribute('opacity', '1');
+          scrPage.setAttribute('opacity', '0');
+        } else if (s === 1) {
+          res.setAttribute('opacity', '0');
+          scrWait.setAttribute('opacity', '1');
+          scrPage.setAttribute('opacity', '0');
+          animMove(req, 260, 388, 77, 750);
+        } else if (s === 2) {
+          req.setAttribute('opacity', '1');
+          req.setAttribute('transform', 'translate(388, 77)');
+          pyBox.setAttribute('stroke', '#E8C46A');
+          tplBox.setAttribute('stroke', '#F0A8CC');
+          gear.setAttribute('opacity', '1');
+          gear.classList.add('flask-working');
+        } else if (s === 3) {
+          req.setAttribute('opacity', '0.45');
+          tplBox.setAttribute('stroke', '#7FD4A8');
+          animMove(res, 388, 260, 148, 750);
+        } else if (s === 4) {
+          req.setAttribute('opacity', '0');
+          res.setAttribute('opacity', '1');
+          res.setAttribute('transform', 'translate(260, 148)');
+          scrWait.setAttribute('opacity', '0');
+          scrPage.setAttribute('opacity', '1');
+        }
+      }
+
+      $('fl-next').addEventListener('click', function () {
+        clearInterval(timer); timer = null;
+        applyStep(step >= 4 ? 1 : step + 1);
+      });
+
+      $('fl-play').addEventListener('click', function () {
+        clearInterval(timer);
+        applyStep(1);
+        timer = setInterval(function () {
+          if (step >= 4) { clearInterval(timer); timer = null; return; }
+          applyStep(step + 1);
+        }, 1900);
+      });
+
+      $('fl-reset').addEventListener('click', function () {
+        clearInterval(timer); timer = null;
+        applyStep(0);
+      });
+    })();
+
+
+  </script>
+</body>
+
+</html>
