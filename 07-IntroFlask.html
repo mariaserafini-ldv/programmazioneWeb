@@ -902,7 +902,7 @@ Flask</textarea></div>
         def: ['La funzione', 'La funzione contiene le istruzioni che Flask esegue quando arriva una richiesta per l’indirizzo associato.'],
         ret: ['return', 'La funzione restituisce la risposta che Flask invierà al browser.'],
         html: ['render_template', 'Carica il file <code>index.html</code> dalla cartella <code>templates/</code> e lo prepara come risposta HTML.'],
-        run: ['Avviare il server', 'Avvia il server di sviluppo sul computer. <code>debug=True</code> è utile durante lo sviluppo perché mostra gli errori e ricarica l’applicazione quando il codice cambia. Non va usato in produzione.']
+        run: ['Avviare il server', 'Avvia il server di sviluppo sul computer. <code>debug = True</code> è utile durante lo sviluppo perché mostra gli errori e ricarica l’applicazione quando il codice cambia. Non va usato in produzione. Puoi usare <code>host = "0.0.0.0"</code> per rendere visibile il tuo sito da un altro pc, e <code>port = 5000</code> (o altro numero) per impostare la porta utilizzata dal server.']
       });
     $('a1-term').innerHTML = codeBlock('terminale', 'python app.py\n<span class="m"> * Running on http://127.0.0.1:5000</span>\n\nApri nel browser: <span class="a">http://127.0.0.1:5000</span>');
 
